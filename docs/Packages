@@ -45,7 +45,7 @@ Conflicts: com.mowang.crashanalyzer
 Replaces: com.mowang.crashanalyzer
 Installed-Size: 520
 Description: 在原「AI 日志分析」（CrashAnalyzer 1.2.0）上增加：日志列表批量选择删除（.ips + .ips.synced）、详情页一键 DeepSeek 直连分析、DeepSeek 接口/模型默认值（deepseek-v4.1-flash）。保留原有的本地诊断、案例库、证据浏览和 AI 配置。
-Filename: ./debs/com.pandan.crashanalyzerpro_1.2.0-2_iphoneos-arm64.a694b68c.deb
+Filename: ./debs/com.pandan.crashanalyzerpro_1.2.0-2_iphoneos-arm64.deb
 Size: 156818
 MD5sum: 82aa14ef92f1106e235d7e0fa547b7b0
 SHA1: 75dc8c5e4c1eae61e849de5292eaa8eb4f13ba7a
@@ -64,7 +64,7 @@ Conflicts: com.mowang.crashanalyzer
 Replaces: com.mowang.crashanalyzer
 Installed-Size: 520
 Description: 在原「AI 日志分析」（CrashAnalyzer 1.2.0）上增加：日志列表批量选择删除（.ips + .ips.synced）、详情页一键 DeepSeek 直连分析、DeepSeek 接口/模型默认值（deepseek-v4.1-flash）。保留原有的本地诊断、案例库、证据浏览和 AI 配置。
-Filename: ./debs/com.pandan.crashanalyzerpro_1.2.0-2_iphoneos-arm64e.9c06b71e.deb
+Filename: ./debs/com.pandan.crashanalyzerpro_1.2.0-2_iphoneos-arm64e.deb
 Size: 156714
 MD5sum: 32009bb507ff82cf87deb10a0811f4d9
 SHA1: a5534dc45e8802e9f73aa6bf62c8ce6429e65617
@@ -179,3 +179,73 @@ Size: 100092
 MD5sum: 7a8287b8242279fadbb70d74f039abfb
 SHA1: 05e6b1f2047a11e2a98705a5bb36e11b2d68d772
 SHA256: aa0aec9fd7392edc37cc8ec0626a53af22e147b5f2b941de9c2e1e5f990fa650
+
+Package: com.wkk.wfhook
+Name: 威锋NoAds
+Version: 1.0-3
+Architecture: iphoneos-arm64
+Section: 去广告
+Maintainer: wkk
+Author: wkk
+Depends: mobilesubstrate (>= 0.9.5000)
+Installed-Size: 400
+Description: 去掉可见的所有广告，版本：7.0.8，接大量冷门热门app定制去广告/去更新提示/精简app等业务。联系qq：1772773799
+Icon: https://s1.imagehub.cc/images/2025/10/23/318813ae8987a6ff33c7f64b318b9a70.png
+Filename: ./debs/com.wkk.wfhook_1.0-3_iphoneos-arm64.deb
+Size: 3728
+MD5sum: 79e58510500a2626c9caeaa3481e1c22
+SHA1: d20b4018018e130d4d71845e57f68f48624934a7
+SHA256: d72efb04bc5437e8ccfc959ec2967b8ed6c053f0575ca5a49a0f3a7e3caccda3
+
+Package: com.wkk.wfhook
+Name: 威锋NoAds
+Version: 1.0-3
+Architecture: iphoneos-arm64e
+Section: 去广告
+Maintainer: wkk
+Author: wkk
+Depends: mobilesubstrate (>= 0.9.5000)
+Pre-Depends: rootless-compat(>= 0.9)
+Installed-Size: 400
+Description: 去掉可见的所有广告，版本：7.0.8，接大量冷门热门app定制去广告/去更新提示/精简app等业务。联系qq：1772773799
+Icon: https://s1.imagehub.cc/images/2025/10/23/318813ae8987a6ff33c7f64b318b9a70.png
+Filename: ./debs/com.wkk.wfhook_1.0-3_iphoneos-arm64e.deb
+Size: 5196
+MD5sum: 0cc78e2908f06e93283bd7450d70117f
+SHA1: a57e005289018a04830f7312cdc2348fd55f83bb
+SHA256: 6600687a49aa6c793541785f288186f734f3a70db584dba7e1babbfff8f4448e
+
+Package: qqantirecall.x
+Name: NTQQ_AntiRecall QQ图层
+Version: 1.6.2
+Architecture: iphoneos-arm64
+Section: Tweaks
+Maintainer: 𝙓
+Author: 𝙓
+Depends: mobilesubstrate (>= 0.9.5000)
+Installed-Size: 1148
+Description: 模块入口位于QQ内设置: NTQQ_AntiRecall
+icon: https://huayuarc.github.io/icon/qqantirecall.jpg
+Filename: ./debs/qqantirecall.x-1.6.2-rootless.deb
+Size: 382200
+MD5sum: 8203db3aebb56c994a4e155b0712b64b
+SHA1: 9989f05c58d59fd1392d534d8849a1690376f3ad
+SHA256: c0653e5ab4ddb50b418dcc8a7a37914406555500f38c77030e18ac6f65bd1edf
+
+Package: qqantirecall.x
+Name: NTQQ_AntiRecall QQ图层
+Version: 1.6.2
+Architecture: iphoneos-arm64e
+Section: Tweaks
+Maintainer: 𝙓
+Author: 𝙓
+Depends: mobilesubstrate (>= 0.9.5000)
+Pre-Depends: rootless-compat(>= 0.9)
+Installed-Size: 1148
+Description: 模块入口位于QQ内设置: NTQQ_AntiRecall
+icon: https://huayuarc.github.io/icon/qqantirecall.jpg
+Filename: ./debs/qqantirecall.x-1.6.2-roothide.deb
+Size: 375700
+MD5sum: 883398f8b71186d88cb4f5d9d32c8aff
+SHA1: 074c7950bc622902160b650ca65e895588218536
+SHA256: d3591d5e86721014333392e049d3e11e91f9a4d681cdd8dfa3ac815025254605

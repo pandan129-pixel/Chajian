@@ -75,6 +75,7 @@ python3 scripts/repo.py --keep-all
 
 - 扫描 `../plugins/*/dist`、`../jbb/dist`、`../jb-bypass/dist`、`debs-in/`
 - 从 deb 的 `control.tar.*` 里读 `Package / Version / Architecture`（不依赖 `dpkg-deb`）
+  - `.zst` 压缩的 control 需要 `python3 -m pip install --user zstandard`（或系统里有 `zstd` 命令）
 - 按 dpkg 版本规则比较大小，只留最新版
 - 把 deb 复制到 `docs/debs/`，自动算出 MD5/SHA1/SHA256/Size 写进索引
 - 生成 `Release`（含索引哈希）、三种压缩索引、`index.html`、`CydiaIcon.png`
@@ -88,8 +89,8 @@ exclude_packages = com.bandarhl.bhtwitter com.pandan.xianyu322
 ```
 
 当前收录：`jbb`、`闲鱼助手+存图`、`AI 日志分析 Pro`、`高德 NoAds`、
-`WCLite`、`小红薯(去公告)`、`WATrans`。其中后三个是放在 `debs-in/`
-里的现成 deb，构建其他项目时不会丢。
+`WCLite`、`小红薯(去公告)`、`WATrans`、`威锋NoAds`、`NTQQ_AntiRecall 1.6.2`。
+外部 deb 都放在 `debs-in/`，来源和校验和见 `debs-in/README.md`。
 
 局域网测试：
 

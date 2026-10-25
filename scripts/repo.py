@@ -96,11 +96,18 @@ def decompress(name, body):
     if name.endswith(".bz2"):
         return bz2.decompress(body)
     if name.endswith(".zst"):
-        exe = shutil.which("zstd")
-        if not exe:
-            raise RuntimeError("control.tar.zst 需要 zstd 命令（brew install zstd）")
-        return subprocess.run([exe, "-dc"], input=body,
-                              stdout=subprocess.PIPE, check=True).stdout
+        try:
+            import zstandard
+        except ImportError:
+            exe = shutil.which("zstd")
+            if not exe:
+                raise RuntimeError(
+                    "control.tar.zst 需要 zstandard 模块（python3 -m pip install --user zstandard）"
+                    " 或 zstd 命令")
+            return subprocess.run([exe, "-dc"], input=body,
+                                  stdout=subprocess.PIPE, check=True).stdout
+        with zstandard.ZstdDecompressor().stream_reader(io.BytesIO(body)) as reader:
+            return reader.read()
     return body
 
 
