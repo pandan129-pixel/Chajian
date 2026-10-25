@@ -1,0 +1,13 @@
+Package: com.pandan.crashanalyzerpro
+Name: AI 日志分析 Pro
+Description: 在原「AI 日志分析」（CrashAnalyzer 1.2.0）上增加：日志列表批量选择删除（.ips + .ips.synced）、详情页一键 DeepSeek 直连分析、DeepSeek 接口/模型默认值（deepseek-v4.1-flash）。保留原有的本地诊断、案例库、证据浏览和 AI 配置。
+Version: 1.2.0-2
+Architecture: @ARCH@
+Section: Tweaks
+Depends: firmware (>= 15.0), preferenceloader, mobilesubstrate
+Conflicts: com.mowang.crashanalyzer
+Replaces: com.mowang.crashanalyzer
+Priority: optional
+Author: pandan
+Maintainer: pandan
+Installed-Size: 520

@@ -1,0 +1,9 @@
+Package: com.pandan.jbbprefs
+Name: JBB Preferences
+Version: 1.0.0
+Architecture: iphoneos-arm64e
+Description: Per-app settings for jbb
+Maintainer: pandan
+Author: pandan
+Section: Tweaks
+Depends: preferenceloader

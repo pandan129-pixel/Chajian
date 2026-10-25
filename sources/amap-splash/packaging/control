@@ -1,0 +1,11 @@
+Package: com.pandan.amapsplash
+Name: 高德地图 NoAds (Pandan)
+Version: 1.1.0
+Architecture: @ARCH@
+Description: 去除高德地图开屏/实时广告与部分启动弹窗，适配 17.02.1，arm64+arm64e。
+Maintainer: pandan
+Author: pandan
+Section: Tweaks
+Depends: firmware (>= 15.0)
+Conflicts: com.wkk.gaodehook
+Replaces: com.wkk.gaodehook

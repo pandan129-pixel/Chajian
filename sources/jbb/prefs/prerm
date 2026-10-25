@@ -1,0 +1,20 @@
+#!/bin/sh
+# Remove the files the postinst generated (dpkg does not track them).
+case "$1" in
+    remove|purge)
+        launchctl unload /var/jb/Library/LaunchDaemons/com.pandan.jbbd.plist >/dev/null 2>&1 || true
+        B=""
+        for c in /var/jb/Library/PreferenceBundles/JBBPrefs.bundle /Library/PreferenceBundles/JBBPrefs.bundle; do
+            [ -d "$c" ] && B="$c" && break
+        done
+        if [ -n "$B" ]; then
+            rm -rf "$B/filters" "$B/jbb-tweaks.txt" "$B/jbb-installed.txt"
+            rmdir "$B" 2>/dev/null || true
+        fi
+        rm -rf /var/mobile/Library/Preferences/jbb-filters
+        rm -f /var/mobile/Library/Preferences/jbb-installed.txt
+        rm -f /var/mobile/Library/Preferences/com.pandan.jbb.tweaks.txt
+        [ "$1" = purge ] && rm -f /var/mobile/Library/Preferences/com.pandan.jbb.plist
+        ;;
+esac
+exit 0

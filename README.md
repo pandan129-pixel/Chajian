@@ -2,6 +2,8 @@
 
 源地址：<https://pandan129-pixel.github.io/Chajian/>
 
+插件源码：`sources/`（jbb / 闲鱼助手+存图 / AI 日志分析 / 高德 NoAds）
+
 把 `plugins/*/dist`、`jbb/dist`、`jb-bypass/dist`、`debs-in/` 里的 `.deb`
 汇总成一个 Sileo / Cydia 可直接添加的 apt 源。模仿的是 opa334、roothide 这种
 **GitHub Pages 平铺源**（`Suites: ./`）的做法，不依赖 reprepro 或数据库。
