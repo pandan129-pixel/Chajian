@@ -1,0 +1,25 @@
+Origin: Pandan Repo
+Label: Pandan Repo
+Suite: stable
+Version: 1.0
+Codename: ios
+Architectures: iphoneos-arm64 iphoneos-arm64e
+Components: main
+Description: Pandan 自用 iOS 插件源（roothide / rootless）
+Date: Sun, 25 Oct 2026 20:45:21 +0000
+Icon: file://CydiaIcon.png
+MD5Sum:
+ 3c913adaee861a70f02062b5b75129ae 7110 Packages
+ b47ae8586a78e9137a0ea93a16dea7ca 2887 Packages.gz
+ 087efbd3d78bc7a2f89c61d4f11217c7 3060 Packages.bz2
+ 2e4ce04828f9d09c2fd0233b243ed838 2704 Packages.xz
+SHA1:
+ 0d2c636a4d09541953794fbb52c98f133d5622c1 7110 Packages
+ 7ff6bde7289c033f6d9a5b20f450e3cfd2320374 2887 Packages.gz
+ 5497ccf50251b88c94c1f1371b0c42b111928c26 3060 Packages.bz2
+ 9a0408f901aac7d90f85b07258bf2448ce18f48c 2704 Packages.xz
+SHA256:
+ c663df8891823e2e966413971c0bbfc37a41f5dfd3cf71820f654e7891da957e 7110 Packages
+ 034ad322af53fd1839feaf78592d17d925d685c3b7ad0a32fc34a1800d560ef9 2887 Packages.gz
+ 65399d1c441eb84d09edd06ea315a19c4d9b39b469080c4e94e61eb85826ccbd 3060 Packages.bz2
+ d6ee517d59c3b5ef73ff7e51875adea0c8c4433dbdd6345077a0296ee2e966be 2704 Packages.xz

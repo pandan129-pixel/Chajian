@@ -1,0 +1,33 @@
+name: Rebuild repo index
+
+# 只在 docs/debs 里的 deb 变化时重建索引，避免和本地提交的索引互相打架。
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/debs/**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Rebuild Packages / Release
+        run: python3 scripts/repo.py --source docs/debs --out docs --no-prune
+
+      - name: Commit index
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs
+          if git diff --cached --quiet; then
+            echo "index unchanged"
+          else
+            git commit -m "chore: rebuild repo index [skip ci]"
+            git push
+          fi

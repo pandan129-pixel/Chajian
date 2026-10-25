@@ -1,0 +1,181 @@
+Package: com.pandan.amapsplash
+Name: 高德地图 NoAds (Pandan)
+Version: 1.1.0
+Architecture: iphoneos-arm64
+Section: Tweaks
+Maintainer: pandan
+Author: pandan
+Depends: firmware (>= 15.0)
+Conflicts: com.wkk.gaodehook
+Replaces: com.wkk.gaodehook
+Description: 去除高德地图开屏/实时广告与部分启动弹窗，适配 17.02.1，arm64+arm64e。
+Filename: ./debs/com.pandan.amapsplash_1.1.0_iphoneos-arm64.deb
+Size: 11774
+MD5sum: 713baccc153458f26d472f85a2dcaea6
+SHA1: 018cf03f4cf48f2c5661fb20c4ad747cb99c7c00
+SHA256: f0595350ed0e9b4f4804128d73d3e92dd02c853b5657f8abf92a2ab3ea9f6c30
+
+Package: com.pandan.amapsplash
+Name: 高德地图 NoAds (Pandan)
+Version: 1.1.0
+Architecture: iphoneos-arm64e
+Section: Tweaks
+Maintainer: pandan
+Author: pandan
+Depends: firmware (>= 15.0)
+Conflicts: com.wkk.gaodehook
+Replaces: com.wkk.gaodehook
+Description: 去除高德地图开屏/实时广告与部分启动弹窗，适配 17.02.1，arm64+arm64e。
+Filename: ./debs/com.pandan.amapsplash_1.1.0_iphoneos-arm64e.deb
+Size: 11734
+MD5sum: 416cdf3690521db81ab998e8ced31aa6
+SHA1: 8d345a81dac5f91ee5cb2442f9d2f8e61163423e
+SHA256: b7f08cd14d1c3c3d01ee111c8a5c0ef65b695e4c338a0aa5510d08d3dcc004fb
+
+Package: com.pandan.crashanalyzerpro
+Name: AI 日志分析 Pro
+Version: 1.2.0-2
+Architecture: iphoneos-arm64
+Section: Tweaks
+Priority: optional
+Maintainer: pandan
+Author: pandan
+Depends: firmware (>= 15.0), preferenceloader, mobilesubstrate
+Conflicts: com.mowang.crashanalyzer
+Replaces: com.mowang.crashanalyzer
+Installed-Size: 520
+Description: 在原「AI 日志分析」（CrashAnalyzer 1.2.0）上增加：日志列表批量选择删除（.ips + .ips.synced）、详情页一键 DeepSeek 直连分析、DeepSeek 接口/模型默认值（deepseek-v4.1-flash）。保留原有的本地诊断、案例库、证据浏览和 AI 配置。
+Filename: ./debs/com.pandan.crashanalyzerpro_1.2.0-2_iphoneos-arm64.a694b68c.deb
+Size: 156818
+MD5sum: 82aa14ef92f1106e235d7e0fa547b7b0
+SHA1: 75dc8c5e4c1eae61e849de5292eaa8eb4f13ba7a
+SHA256: a694b68cba4fa48911261b7412c6f2267069fd4c92035219cdf8cf79a012be7b
+
+Package: com.pandan.crashanalyzerpro
+Name: AI 日志分析 Pro
+Version: 1.2.0-2
+Architecture: iphoneos-arm64e
+Section: Tweaks
+Priority: optional
+Maintainer: pandan
+Author: pandan
+Depends: firmware (>= 15.0), preferenceloader, mobilesubstrate
+Conflicts: com.mowang.crashanalyzer
+Replaces: com.mowang.crashanalyzer
+Installed-Size: 520
+Description: 在原「AI 日志分析」（CrashAnalyzer 1.2.0）上增加：日志列表批量选择删除（.ips + .ips.synced）、详情页一键 DeepSeek 直连分析、DeepSeek 接口/模型默认值（deepseek-v4.1-flash）。保留原有的本地诊断、案例库、证据浏览和 AI 配置。
+Filename: ./debs/com.pandan.crashanalyzerpro_1.2.0-2_iphoneos-arm64e.9c06b71e.deb
+Size: 156714
+MD5sum: 32009bb507ff82cf87deb10a0811f4d9
+SHA1: a5534dc45e8802e9f73aa6bf62c8ce6429e65617
+SHA256: 9c06b71e6110bf378cc97c65d664902f3649eca2754b2df3783e175c18cffbe0
+
+Package: com.pandan.jbb
+Name: JBB
+Version: 6.16
+Architecture: iphoneos-arm64
+Section: Tweaks
+Maintainer: pandan
+Author: pandan
+Depends: preferenceloader
+Description: Jailbreak detection bypass (tweak + per-app settings)
+Icon: https://pandan129-pixel.github.io/Chajian/icons/com.pandan.jbb.png
+Filename: ./debs/com.pandan.jbb_6.16_iphoneos-arm64.deb
+Size: 51300
+MD5sum: 848e091496d9e9eff2320a5461a2a867
+SHA1: 1b4d020c05ae4ba3b18cdade2b529fb0cc0eb673
+SHA256: c331546577be712b0b45560ea0134ee9aa09be88674737f69c86daa7a85ad79b
+
+Package: com.pandan.jbb
+Name: JBB
+Version: 6.22.7
+Architecture: iphoneos-arm64e
+Section: Tweaks
+Maintainer: pandan
+Author: pandan
+Depends: preferenceloader
+Description: Jailbreak detection bypass (tweak + per-app settings)
+Icon: https://pandan129-pixel.github.io/Chajian/icons/com.pandan.jbb.png
+Filename: ./debs/com.pandan.jbb_6.22.7_iphoneos-arm64e.deb
+Size: 112710
+MD5sum: 269e7402e2ecee6b43662a7b94f516f8
+SHA1: 982bf23f5c8ff776debda798c1f10b806f5b6883
+SHA256: 786935957fb29fe463c1ed5634fd90485bd3d1acea26b8b950166e96d16658c5
+
+Package: com.pandan.watrans
+Name: WATrans
+Version: 0.5.3
+Architecture: iphoneos-arm64e
+Section: Tweaks
+Maintainer: Pandan
+Author: Pandan
+Depends: mobilesubstrate (>= 0.9.5000), firmware (>= 15.0)
+Installed-Size: 288
+Description: WhatsApp / WhatsApp Business DeepSeek 翻译插件（发送前翻译·自动跟随对方语言 + 双方消息自动内联翻译·持久缓存 + 长按消息内联译文）
+Filename: ./debs/com.pandan.watrans_0.5.3.deb
+Size: 43166
+MD5sum: 7e1ca664d348a6d81c4137901095eef2
+SHA1: 95e1dcf45a90e254b91322bbfbb7942fd36d3753
+SHA256: e066bf97453b08f9d0959f5843079e0de99265918c35b5060d5436054e9765f4
+
+Package: com.pandan.xhs.noad
+Name: 小红薯(去公告)
+Version: 2.0.6-7
+Architecture: iphoneos-arm64e
+Section: Tweaks
+Maintainer: pandan
+Author: 𝙓（原作者） / pandan（去公告补丁）
+Depends: mobilesubstrate (>= 0.9.5000)
+Pre-Depends: rootless-compat (>= 0.9)
+Conflicts: xhs.x, com.xx.xhshook
+Replaces: xhs.x, com.xx.xhshook
+Provides: xhs.x
+Description: 小红薯 精简版（基于官方 2.0.6）
+ 去掉了启动公告弹窗、授权/赞助弹窗、自动关注，并放开授权门禁。
+ * 独立包名，不会被原始源(xhs.x)的更新覆盖
+ * 去掉启动公告与授权/赞助弹窗
+ * 去掉自动关注（不再调用关注接口）
+ * 关闭授权传输层回连 + 放开设置页授权门禁
+ * 其余功能与官方一致
+icon: https://huayuarc.github.io/icon/xhs.jpg
+Filename: ./debs/com.pandan.xhs.noad_2.0.6-7.deb
+Size: 3558356
+MD5sum: 4a378d0b88dd70a952ed6b20028d4558
+SHA1: f93f4450e53b61c4b7cea410b9b7f3e240825622
+SHA256: 5de4673d803bf8e35d77e17351f9b1f6be422d81ab46ebb6b420c487801944b6
+
+Package: com.pandan.xianyuduo
+Name: 闲鱼助手+存图 融合版
+Version: 1.0.26
+Architecture: iphoneos-arm64e
+Section: Tweaks
+Priority: optional
+Maintainer: pandan
+Author: pandan
+Depends: firmware (>= 15.0), mobilesubstrate
+Conflicts: im.mjh.xianyuadblock, com.pandan.xianyucombo, com.pandan.xianyuplus
+Replaces: im.mjh.xianyuadblock, com.pandan.xianyucombo, com.pandan.xianyuplus
+Installed-Size: 320
+Description: 单 dylib 融合：开屏/热启动广告拦截、信息流广告隐藏、我的页净化与入口，以及商品原图/视频收集与一键保存到相册。基于 3.2.2 与存图插件逆向重写，无 SQLite、无定时器、无常驻后台任务。
+Filename: ./debs/com.pandan.xianyuduo_1.0.26_iphoneos-arm64e.deb
+Size: 232746
+MD5sum: ce57dfcfeed5141761e0b2b0c1474edd
+SHA1: 8da894bef3a9ad238bb667025f810b12d4746d1e
+SHA256: 5fd132966266653987bdf7a9465321fa20374e6622a43609effbe33bbb91177b
+
+Package: com.wclite.tweak
+Name: WCLite
+Version: 1.6.5
+Architecture: iphoneos-arm64e
+Section: Tweaks
+Maintainer: WCLite
+Author: WCLite
+Depends: firmware (>= 14.0)
+Pre-Depends: rootless-compat(>= 0.9)
+Installed-Size: 616
+Description: 微信精简增强插件 (账户名片/防撤回/页面净化) - RootHide iOS17 兼容
+Filename: ./debs/com.wclite.tweak_1.6.5.deb
+Size: 100092
+MD5sum: 7a8287b8242279fadbb70d74f039abfb
+SHA1: 05e6b1f2047a11e2a98705a5bb36e11b2d68d772
+SHA256: aa0aec9fd7392edc37cc8ec0626a53af22e147b5f2b941de9c2e1e5f990fa650
