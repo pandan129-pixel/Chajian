@@ -146,7 +146,7 @@ SHA256: 5de4673d803bf8e35d77e17351f9b1f6be422d81ab46ebb6b420c487801944b6
 
 Package: com.pandan.xianyuduo
 Name: 闲鱼助手+存图 融合版
-Version: 1.0.26
+Version: 1.0.27
 Architecture: iphoneos-arm64e
 Section: Tweaks
 Priority: optional
@@ -157,11 +157,11 @@ Conflicts: im.mjh.xianyuadblock, com.pandan.xianyucombo, com.pandan.xianyuplus
 Replaces: im.mjh.xianyuadblock, com.pandan.xianyucombo, com.pandan.xianyuplus
 Installed-Size: 320
 Description: 单 dylib 融合：开屏/热启动广告拦截、信息流广告隐藏、我的页净化与入口，以及商品原图/视频收集与一键保存到相册。基于 3.2.2 与存图插件逆向重写，无 SQLite、无定时器、无常驻后台任务。
-Filename: ./debs/com.pandan.xianyuduo_1.0.26_iphoneos-arm64e.deb
-Size: 232746
-MD5sum: ce57dfcfeed5141761e0b2b0c1474edd
-SHA1: 8da894bef3a9ad238bb667025f810b12d4746d1e
-SHA256: 5fd132966266653987bdf7a9465321fa20374e6622a43609effbe33bbb91177b
+Filename: ./debs/com.pandan.xianyuduo_1.0.27_iphoneos-arm64e.deb
+Size: 235408
+MD5sum: a9fb8b7d32cf1653ca2fad01013e87df
+SHA1: 0841f771eb9cd1f26cd45d79ce02c28a6d42c9d6
+SHA256: 48c9c4218027213c809d6b6ecd537dae96a5b5fe3e500adec01789f8cd2469f4
 
 Package: com.wclite.tweak
 Name: WCLite
