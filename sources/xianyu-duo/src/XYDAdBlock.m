@@ -135,9 +135,8 @@ static void xyd_requestHotStartDecide(id self, SEL _cmd, long long flag) {
 
 static void (*orig_setDisableHotStartAd)(id, SEL, BOOL);
 static void xyd_setDisableHotStartAd(id self, SEL _cmd, BOOL v) {
-    if (!XYDBlockSplash()) {
-        if (orig_setDisableHotStartAd) orig_setDisableHotStartAd(self, _cmd, v);
-    }
+    // 必须放行，否则 App 内部状态和 getter 不一致，热启动可能卡住
+    if (orig_setDisableHotStartAd) orig_setDisableHotStartAd(self, _cmd, v);
 }
 
 static void (*orig_handleAppWillEnterForeground)(id, SEL);
@@ -162,28 +161,31 @@ static BOOL xyd_disableHotStartAd(id self, SEL _cmd) {
 }
 
 static void (*orig_splashLayout)(id, SEL);
+static void XYDHideSplashViewAsync(UIView *v) {
+    if (!v) return;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        @try { v.hidden = YES; v.alpha = 0; } @catch (__unused NSException *e) {}
+    });
+}
+
 static void xyd_splashLayout(id self, SEL _cmd) {
     if (orig_splashLayout) orig_splashLayout(self, _cmd);
     if (!XYDBlockSplash()) return;
-    if ([self isKindOfClass:[UIView class]]) {
-        UIView *v = (UIView *)self;
-        v.hidden = YES;
-        v.alpha = 0;
-    }
+    if ([self isKindOfClass:[UIView class]]) XYDHideSplashViewAsync((UIView *)self);
 }
 
 static void (*orig_splashDidMove)(id, SEL);
 static void xyd_splashDidMove(id self, SEL _cmd) {
     if (orig_splashDidMove) orig_splashDidMove(self, _cmd);
     if (!XYDBlockSplash()) return;
-    if ([self isKindOfClass:[UIView class]]) ((UIView *)self).hidden = YES;
+    if ([self isKindOfClass:[UIView class]]) XYDHideSplashViewAsync((UIView *)self);
 }
 
 static void (*orig_splashAddSubview)(id, SEL, UIView *);
 static void xyd_splashAddSubview(id self, SEL _cmd, UIView *v) {
     if (orig_splashAddSubview) orig_splashAddSubview(self, _cmd, v);
     if (!XYDBlockSplash()) return;
-    if ([self isKindOfClass:[UIView class]]) ((UIView *)self).hidden = YES;
+    if ([self isKindOfClass:[UIView class]]) XYDHideSplashViewAsync((UIView *)self);
 }
 
 #pragma mark - feed
@@ -197,7 +199,7 @@ static void xyd_wfLayout(id self, SEL _cmd) {
     if (orig) ((void (*)(id, SEL))orig)(self, _cmd);
     if (!XYDPrefBool(@"enabled", YES) || !XYDPrefBool(@"blockFeed", YES)) return;
     if (![self isKindOfClass:[UIView class]]) return;
-
+    @try {
     NSArray *cached = objc_getAssociatedObject(self, kXYDHiddenViewsKey);
     if (cached) {
         for (UIView *v in cached) v.hidden = YES;
@@ -228,6 +230,7 @@ static void xyd_wfLayout(id self, SEL _cmd) {
     } else {
         objc_setAssociatedObject(self, kXYDHiddenViewsKey, @[], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
+    } @catch (__unused NSException *e) {}
 }
 
 static void xyd_wfPrepare(id self, SEL _cmd) {
@@ -267,16 +270,8 @@ void XYDApplyAdPrefs(void) {
 
 void XYDInstallSplashHooks(void) {
     if (!XYDPrefBool(@"blockSplash", YES)) return;
-    XYDHookFirst(@[@"FMSplashModule", @"IFMSplashModule"], @"loadAd", (IMP)xyd_loadAd, (IMP *)&orig_loadAd);
-    XYDHookFirst(@[@"FMSplashModule", @"IFMSplashModule"], @"showSplashView", (IMP)xyd_showSplashView, (IMP *)&orig_showSplashView);
-    XYDHookFirst(@[@"FMSplashModule", @"IFMSplashModule"], @"fishSplashAdDidShow", (IMP)xyd_fishSplashAdDidShow, (IMP *)&orig_fishSplashAdDidShow);
-    XYDHookFirst(@[@"FMSplashModule", @"IFMSplashModule"], @"fishSplashAdDidFinish", (IMP)xyd_fishSplashAdDidFinish, (IMP *)&orig_fishSplashAdDidFinish);
-
-    XYDHookOnce(@"FMHomeRefreshHelper", @"handleAppWillEnterForeground", (IMP)xyd_handleAppWillEnterForeground, (IMP *)&orig_handleAppWillEnterForeground);
-    XYDHookOnce(@"FMHomeRefreshHelper", @"requestHotStartDecide:", (IMP)xyd_requestHotStartDecide, (IMP *)&orig_requestHotStartDecide);
-    XYDHookOnce(@"FMHomeRefreshHelper", @"handleHotStartDecideResult:backgroundMinutes:", (IMP)xyd_handleHotStartResult, (IMP *)&orig_handleHotStartResult);
-    XYDHookOnce(@"FMHomeRefreshHelper", @"postHotStartRefreshHomeNotification", (IMP)xyd_postHotStartRefreshHomeNotification, (IMP *)&orig_postHotStartRefreshHomeNotification);
-
+    // 开屏/热启动生命周期一概不拦：只视觉隐藏广告窗口，
+    // 让 App 自己的 load -> show -> finish 状态机完整跑完（状态栏也依赖它）。
     XYDHookFirst(@[@"_TtC6FishAd18FishSplashAdWindow", @"FishSplashAdWindow"], @"layoutSubviews", (IMP)xyd_splashLayout, (IMP *)&orig_splashLayout);
     XYDHookFirst(@[@"_TtC6FishAd18FishSplashAdWindow", @"FishSplashAdWindow"], @"didMoveToWindow", (IMP)xyd_splashDidMove, (IMP *)&orig_splashDidMove);
     XYDHookFirst(@[@"_TtC6FishAd18FishSplashAdWindow", @"FishSplashAdWindow"], @"addSubview:", (IMP)xyd_splashAddSubview, (IMP *)&orig_splashAddSubview);
@@ -297,10 +292,20 @@ void XYDInstallFeedHooks(void) {
     }
     if (XYDPrefBool(@"cleanMyPage", YES)) {
         if (!gMyPageLayoutOrig) gMyPageLayoutOrig = XYDOrigMap();
-        XYDHookAllSubclassesOf([UIView class],
-            @[@"IFMatrix.FloatingUserInfoContentView", @"IFMatrix.TopUserInfoContentView",
-              @"IFMatrix.WorkspaceFloatingUserInfoContentView", @"IFMatrix.WorkspaceTopUserInfoContentView"],
-            @"layoutSubviews", (IMP)xyd_userInfoLayout, gMyPageLayoutOrig);
+        NSArray *names = @[@"IFMatrix.FloatingUserInfoContentView",
+                           @"IFMatrix.TopUserInfoContentView",
+                           @"IFMatrix.WorkspaceFloatingUserInfoContentView",
+                           @"IFMatrix.WorkspaceTopUserInfoContentView"];
+        for (NSString *n in names) {
+            Class c = NSClassFromString(n);
+            if (!c) continue;
+            SEL s = NSSelectorFromString(@"layoutSubviews");
+            if (!class_getInstanceMethod(c, s)) continue;
+            IMP orig = NULL;
+            if (XYDHookOnce(n, @"layoutSubviews", (IMP)xyd_userInfoLayout, &orig)) {
+                if (orig) [gMyPageLayoutOrig setObject:[NSValue valueWithPointer:orig] forKey:c];
+            }
+        }
     }
 }
 

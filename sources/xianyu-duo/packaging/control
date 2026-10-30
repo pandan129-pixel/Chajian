@@ -1,7 +1,7 @@
 Package: com.pandan.xianyuduo
 Name: 闲鱼助手+存图 融合版
 Description: 单 dylib 融合：开屏/热启动广告拦截、信息流广告隐藏、我的页净化与入口，以及商品原图/视频收集与一键保存到相册。基于 3.2.2 与存图插件逆向重写，无 SQLite、无定时器、无常驻后台任务。
-Version: 1.0.26
+Version: 1.0.27
 Architecture: iphoneos-arm64e
 Section: Tweaks
 Depends: firmware (>= 15.0), mobilesubstrate

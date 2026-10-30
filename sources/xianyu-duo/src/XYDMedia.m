@@ -292,7 +292,7 @@ static id xyd_urlAsset(id self, SEL _cmd, NSURL *url, id options) {
     static __thread BOOL inAsset = NO;
     if (!inAsset) {
         inAsset = YES;
-        XYDNoteVideoURL(url);
+        @try { XYDNoteVideoURL(url); } @catch (__unused NSException *e) {}
         inAsset = NO;
     }
     return orig_urlAsset ? orig_urlAsset(self, _cmd, url, options) : nil;
@@ -404,6 +404,7 @@ static NSString *XYDItemIdFromRequest(NSURLRequest *req) {
 }
 
 static void XYDNoteRequestURL(NSURLRequest *req) {
+    @try {
     NSURL *url = req.URL;
     if (!url) return;
     NSString *s = req.URL.absoluteString;
@@ -447,6 +448,9 @@ static void XYDNoteRequestURL(NSURLRequest *req) {
             [st addRemoteVideoURL:url cover:nil];
         }
     }
+    } @catch (NSException *e) {
+        XYD_LOG(@"req guard %@", e.reason);
+    }
 }
 
 static id xyd_dataTaskReq(id self, SEL _cmd, NSURLRequest *req, void (^completion)(NSData *, NSURLResponse *, NSError *)) {
@@ -461,8 +465,15 @@ static id xyd_dataTaskReq(id self, SEL _cmd, NSURLRequest *req, void (^completio
                 XYDNoteRequestURL([NSURLRequest requestWithURL:resp.URL]);
                 XYDNoteVideoURL(resp.URL);
             }
-            if ([XYDStore shared].onDetailPage && data.length < 512 * 1024) {
-                XYDScanVideoURLsInData(data);
+            if ([XYDStore shared].onDetailPage && data.length && data.length < 512 * 1024) {
+                NSString *mime = resp.MIMEType.lowercaseString ?: @"";
+                NSString *u = resp.URL.absoluteString.lowercaseString ?: @"";
+                BOOL json = [mime containsString:@"json"] || [mime containsString:@"text"];
+                BOOL relevant = [u containsString:@"item"] || [u containsString:@"video"] ||
+                                [u containsString:@"detail"] || [u containsString:@"media"];
+                if (json && relevant) {
+                    @try { XYDScanVideoURLsInData(data); } @catch (__unused NSException *e) {}
+                }
             }
         }
         if (completion) completion(data, resp, err);
@@ -483,8 +494,15 @@ static id xyd_dataTaskURL(id self, SEL _cmd, NSURL *url, void (^completion)(NSDa
                 XYDNoteRequestURL([NSURLRequest requestWithURL:resp.URL]);
                 XYDNoteVideoURL(resp.URL);
             }
-            if ([XYDStore shared].onDetailPage && data.length < 512 * 1024) {
-                XYDScanVideoURLsInData(data);
+            if ([XYDStore shared].onDetailPage && data.length && data.length < 512 * 1024) {
+                NSString *mime = resp.MIMEType.lowercaseString ?: @"";
+                NSString *u = resp.URL.absoluteString.lowercaseString ?: @"";
+                BOOL json = [mime containsString:@"json"] || [mime containsString:@"text"];
+                BOOL relevant = [u containsString:@"item"] || [u containsString:@"video"] ||
+                                [u containsString:@"detail"] || [u containsString:@"media"];
+                if (json && relevant) {
+                    @try { XYDScanVideoURLsInData(data); } @catch (__unused NSException *e) {}
+                }
             }
         }
         if (completion) completion(data, resp, err);
@@ -508,7 +526,6 @@ void XYDInstallPlayerHooks(void) {
 
 void XYDInstallOptionalHooks(void) {
     XYDInstallPlayerHooks();
-    XYDHookClass(@"AVPlayerItem", @"playerItemWithURL:", (IMP)xyd_playerItemURL, (IMP *)&orig_playerItemURL);
 }
 
 void XYDInstallCapture(void) {
@@ -524,8 +541,7 @@ void XYDInstallCapture(void) {
                     (IMP)xyd_dataTaskReq, (IMP *)&orig_dataTaskReq);
     XYDHookOnce(@"NSURLSession", @"dataTaskWithURL:completionHandler:",
                     (IMP)xyd_dataTaskURL, (IMP *)&orig_dataTaskURL);
-
-    XYDInstallOptionalHooks();
+    // 播放器 hook 推迟到详情页出现时再装，减少冷启动/通知启动的 hook 面
     dispatch_async(dispatch_get_main_queue(), ^{
         Class concrete = object_getClass([NSURLSession sharedSession]);
         if (concrete && concrete != [NSURLSession class]) {
@@ -645,6 +661,7 @@ static NSString *XYDRouterURLString(id obj) {
 }
 
 static void XYDNoteRoute(id urlObj, id query, id params, const char *where) {
+    @try {
     NSString *s = XYDRouterURLString(urlObj);
     if (!s.length) return;
     BOOL itemRoute = [s.lowercaseString containsString:@"item"] || [s.lowercaseString containsString:@"detail"];
@@ -667,6 +684,9 @@ static void XYDNoteRoute(id urlObj, id query, id params, const char *where) {
     if (iid.length) {
         [[XYDStore shared] beginPage:iid];
         if (XYDPrefBool(@"showBall", YES)) XYDInstallFloatingBall();
+    }
+    } @catch (NSException *e) {
+        XYD_LOG(@"route guard %@", e.reason);
     }
 }
 
@@ -826,7 +846,7 @@ void XYDScanVideoCache(void) {
         [dirs addObject:[caches stringByAppendingPathComponent:@"com.taobao.fleamarket"]];
         NSDate *cutoff = [NSDate dateWithTimeIntervalSinceNow:-1800];
         NSMutableArray<NSDictionary *> *found = [NSMutableArray array];
-        NSInteger budget = 6000;
+        NSInteger budget = 2000;
         for (NSString *dir in dirs) {
             BOOL isDir = NO;
             if (![fm fileExistsAtPath:dir isDirectory:&isDir] || !isDir) continue;
@@ -842,9 +862,9 @@ void XYDScanVideoCache(void) {
                 long long size = [a[NSFileSize] longLongValue];
                 if (size < 200 * 1024) continue;
                 [found addObject:@{@"path": full, @"mtime": m ?: [NSDate date], @"size": @(size)}];
-                if (found.count >= 30) break;
+                if (found.count >= 12) break;
             }
-            if (found.count >= 30) break;
+            if (found.count >= 12) break;
         }
         [found sortUsingComparator:^NSComparisonResult(NSDictionary *a, NSDictionary *b) {
             return [b[@"mtime"] compare:a[@"mtime"]];

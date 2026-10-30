@@ -166,6 +166,7 @@ static IMP XYDEntryOriginal(id self) {
 static void xyd_userInfoDidMove(id self, SEL _cmd) {
     IMP orig = XYDEntryOriginal(self);
     if (orig) ((void (*)(id, SEL))orig)(self, _cmd);
+    @try {
     if (!XYDPrefBool(@"myPageEntry", YES)) { [gMyPageButton removeFromSuperview]; gMyPageButton = nil; return; }
     if (![self isKindOfClass:[UIView class]]) return;
     NSString *cn = NSStringFromClass([self class]) ?: @"";
@@ -184,6 +185,7 @@ static void xyd_userInfoDidMove(id self, SEL _cmd) {
     [b addTarget:[XYDBallHost shared] action:@selector(openSettings) forControlEvents:UIControlEventTouchUpInside];
     [host addSubview:b];
     gMyPageButton = b;
+    } @catch (__unused NSException *e) {}
 }
 
 @implementation XYDBallHost (SettingsOpen)
@@ -197,13 +199,26 @@ static void xyd_userInfoDidMove(id self, SEL _cmd) {
 }
 @end
 
+static void XYDInstallUserInfoHook(NSString *name) {
+    Class c = NSClassFromString(name);
+    if (!c) return;
+    SEL sel = NSSelectorFromString(@"didMoveToWindow");
+    if (!class_getInstanceMethod(c, sel)) return;
+    IMP orig = NULL;
+    if (XYDHookOnce(name, @"didMoveToWindow", (IMP)xyd_userInfoDidMove, &orig)) {
+        if (orig) [gMyPageMoveOrig setObject:[NSValue valueWithPointer:orig] forKey:c];
+    }
+}
+
 void XYDInstallEntry(void) {
     if (!gMyPageMoveOrig) {
         gMyPageMoveOrig = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsOpaqueMemory | NSPointerFunctionsOpaquePersonality
                                                valueOptions:NSPointerFunctionsStrongMemory];
     }
-    XYDHookAllSubclassesOf([UIView class],
-        @[@"IFMatrix.FloatingUserInfoContentView", @"IFMatrix.TopUserInfoContentView",
-          @"IFMatrix.WorkspaceFloatingUserInfoContentView", @"IFMatrix.WorkspaceTopUserInfoContentView"],
-        @"didMoveToWindow", (IMP)xyd_userInfoDidMove, gMyPageMoveOrig);
+    // 只挂已知的 4 个类，绝不在启动路径枚举全部 UIView 子类（会拖慢/看门狗杀进程）
+    NSArray *names = @[@"IFMatrix.FloatingUserInfoContentView",
+                       @"IFMatrix.TopUserInfoContentView",
+                       @"IFMatrix.WorkspaceFloatingUserInfoContentView",
+                       @"IFMatrix.WorkspaceTopUserInfoContentView"];
+    for (NSString *n in names) XYDInstallUserInfoHook(n);
 }

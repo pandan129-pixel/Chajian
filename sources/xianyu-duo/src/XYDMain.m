@@ -27,20 +27,28 @@ static void XYDUncaughtException(NSException *e) {
 }
 
 static void XYDInstallCrashHandler(void) {
+    // 只装 NSException handler：信号处理器里 backtrace() 不是 async-signal-safe，
+    // 一旦触发很容易二次死锁，表现就是“界面冻结/闪退且没有日志”。
     NSSetUncaughtExceptionHandler(&XYDUncaughtException);
-    int sigs[] = {SIGSEGV, SIGBUS, SIGABRT, SIGILL, SIGFPE, SIGTRAP};
-    for (unsigned i = 0; i < sizeof(sigs)/sizeof(sigs[0]); i++) signal(sigs[i], XYDHandleSignal);
+}
+
+static void XYDScheduleFeedHooks(void) {
+    if (!XYDPrefBool(@"blockFeed", YES) && !XYDPrefBool(@"cleanMyPage", YES)) return;
+    // 信息流要枚举全部类并 hook 大量 cell：放到后台队列，且等首帧稳定后再做，
+    // 避免启动/通知冷启动时卡主线程被看门狗杀掉。
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
+            XYDInstallFeedHooks();
+        });
+    });
 }
 
 static void XYDInstallAll(void) {
-    XYDInstallCapture();
-    XYDInstallContext();
-    XYDInstallSplashHooks();   // 开屏必须尽早
-    XYDInstallEntry();
-    // 信息流/我的页要枚举 2 万个类，移到首帧之后再装，避免拖慢启动
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        XYDInstallFeedHooks();
-    });
+    @try { XYDInstallCapture(); } @catch (NSException *e) { XYD_LOG(@"capture install guard %@", e.reason); }
+    @try { XYDInstallContext(); } @catch (NSException *e) { XYD_LOG(@"context install guard %@", e.reason); }
+    @try { XYDInstallSplashHooks(); } @catch (NSException *e) { XYD_LOG(@"splash install guard %@", e.reason); }
+    @try { XYDInstallEntry(); } @catch (NSException *e) { XYD_LOG(@"entry install guard %@", e.reason); }
+    XYDScheduleFeedHooks();
 }
 
 static BOOL XYDIncomplete(void) {
@@ -60,7 +68,7 @@ static void XYDScheduleRetries(void) {
         if (!XYDPrefBool(@"enabled", YES)) return;
         XYDInvalidateClassCache();
         XYDInstallSplashHooks();
-        XYDInstallFeedHooks();
+        XYDScheduleFeedHooks();
         XYDInstallEntry();
         XYDInstallContext();
         XYDScheduleRetries();
@@ -134,5 +142,5 @@ static void XYDScheduleRetries(void) {
 __attribute__((constructor))
 static void XYDConstructor(void) {
     // 同步安装：与 3.2.2 一致，保证详情页首屏图片也能被捕获
-    [XYDMain boot];
+    @try { [XYDMain boot]; } @catch (NSException *e) { }
 }
