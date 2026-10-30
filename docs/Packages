@@ -104,19 +104,19 @@ SHA256: 786935957fb29fe463c1ed5634fd90485bd3d1acea26b8b950166e96d16658c5
 
 Package: com.pandan.watrans
 Name: WATrans
-Version: 0.5.3
+Version: 0.6.0
 Architecture: iphoneos-arm64e
 Section: Tweaks
 Maintainer: Pandan
 Author: Pandan
 Depends: mobilesubstrate (>= 0.9.5000), firmware (>= 15.0)
-Installed-Size: 288
+Installed-Size: 304
 Description: WhatsApp / WhatsApp Business DeepSeek 翻译插件（发送前翻译·自动跟随对方语言 + 双方消息自动内联翻译·持久缓存 + 长按消息内联译文）
-Filename: ./debs/com.pandan.watrans_0.5.3.deb
-Size: 43166
-MD5sum: 7e1ca664d348a6d81c4137901095eef2
-SHA1: 95e1dcf45a90e254b91322bbfbb7942fd36d3753
-SHA256: e066bf97453b08f9d0959f5843079e0de99265918c35b5060d5436054e9765f4
+Filename: ./debs/com.pandan.watrans_0.6.0_iphoneos-arm64e.deb
+Size: 46718
+MD5sum: 92277c2ed994dc58f0fec90ade7ae567
+SHA1: 41e8a98bfcdb06668e1c5ccb70ce343431a11696
+SHA256: 7a0620bfd7a3fbfa8c6c8f91b054981d9d71c52e716245b73f782b64c568b393
 
 Package: com.pandan.xhs.noad
 Name: 小红薯(去公告)
