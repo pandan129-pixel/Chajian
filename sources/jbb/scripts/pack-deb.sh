@@ -4,7 +4,7 @@
 set -e
 cd "$(dirname "$0")/.."
 ARCH=${1:-iphoneos-arm64e}
-VER=6.22.7
+VER=6.22.8
 ROOT=build/root
 OUT=dist/com.pandan.jbb_${VER}_${ARCH}.deb
 

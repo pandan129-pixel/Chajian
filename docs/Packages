@@ -133,7 +133,7 @@ SHA256: c331546577be712b0b45560ea0134ee9aa09be88674737f69c86daa7a85ad79b
 
 Package: com.pandan.jbb
 Name: JBB
-Version: 6.22.7
+Version: 6.22.8
 Architecture: iphoneos-arm64e
 Section: Tweaks
 Maintainer: pandan
@@ -141,11 +141,11 @@ Author: pandan
 Depends: preferenceloader
 Description: Jailbreak detection bypass (tweak + per-app settings)
 Icon: https://pandan129-pixel.github.io/Chajian/icons/com.pandan.jbb.png
-Filename: ./debs/com.pandan.jbb_6.22.7_iphoneos-arm64e.deb
-Size: 112710
-MD5sum: 269e7402e2ecee6b43662a7b94f516f8
-SHA1: 982bf23f5c8ff776debda798c1f10b806f5b6883
-SHA256: 786935957fb29fe463c1ed5634fd90485bd3d1acea26b8b950166e96d16658c5
+Filename: ./debs/com.pandan.jbb_6.22.8_iphoneos-arm64e.deb
+Size: 112616
+MD5sum: fa805d0212d8fb9cd2e18766f624fba9
+SHA1: 1d3646a3519335dfac4c945ff534baf68accfe13
+SHA256: af5c967d3d7bdcdcb6c809c88de1929aff72d6b0de23fdf0479ef01b30a19547
 
 Package: com.pandan.watrans
 Name: WATrans

@@ -88,9 +88,11 @@ python3 scripts/repo.py --keep-all
 exclude_packages = com.bandarhl.bhtwitter com.pandan.xianyu322
 ```
 
-当前收录：`jbb`、`闲鱼助手+存图`、`AI 日志分析 Pro`、`高德 NoAds`、
-`WCLite`、`小红薯(去公告)`、`WATrans`、`威锋NoAds`、`NTQQ_AntiRecall 1.6.2`。
-外部 deb 都放在 `debs-in/`，来源和校验和见 `debs-in/README.md`。
+当前收录：`jbb`、`NeoFreeBird (X 12.39)`、`闲鱼助手+存图`、`AI 日志分析 Pro`、
+`高德 NoAds`、`WCLite`、`小红薯(去公告)`、`WATrans`、`威锋NoAds`、
+`NTQQ_AntiRecall 1.6.2`。外部 deb 都放在 `debs-in/`，来源和校验和见
+`debs-in/README.md`；NeoFreeBird 的构建/重打包说明在
+`plugins/x-twitter-nfb/README.md`，源码目录暂未收录（只收 deb）。
 
 局域网测试：
 

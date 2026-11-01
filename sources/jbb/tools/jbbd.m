@@ -2,39 +2,23 @@
  * container. A sandboxed app can only read its own container, so this is the
  * only way to make per-app settings actually reach the tweak.
  *
- * Runs as a LaunchDaemon, re-reads the config when its mtime changes, and
- * writes <container>/Documents/jbb-config.plist for every app that jbb injects
- * into (read from TweakInject/jbb.plist). */
+ * IMPORTANT: LaunchDaemons run under a 6 MB jetsam limit on iOS. Keep the
+ * working set tiny: cache the container map, wrap every app write in its own
+ * autorelease pool, and only republish when the config actually changed. */
 #import <Foundation/Foundation.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
-#define PREFS   @"/var/mobile/Library/Preferences/com.pandan.jbb.cfg.plist"
+#define PREFS     @"/var/mobile/Library/Preferences/com.pandan.jbb.cfg.plist"
 #define PREFS_OLD @"/var/mobile/Library/Preferences/com.pandan.jbb.plist"
-#define LOGPATH @"/var/mobile/Library/Preferences/jbbd.log"
-static NSString *JBRoot(void);
 
-static NSString *StatusPath(void) {
-    return [JBRoot() stringByAppendingPathComponent:@"Library/PreferenceBundles/JBBPrefs.bundle/jbbd.status"];
-}
-
-static NSString *gFilterPath = nil;
 static NSString *JBRoot(void) {
-    if (gFilterPath) return gFilterPath;
+    static NSString *root = nil;
+    if (root) return root;
     NSString *exe = [[NSBundle mainBundle] executablePath] ?: @"/var/jb/usr/lib/jbb/jbbd";
     NSRange r = [exe rangeOfString:@"/usr/lib/jbb/"];
-    NSString *root = r.location != NSNotFound ? [exe substringToIndex:r.location] : @"/var/jb";
-    gFilterPath = [root stringByAppendingPathComponent:@"usr/lib/TweakInject/jbb.plist"];
-    return gFilterPath;
-}
-
-static void Log(NSString *fmt, ...) {
-    va_list a; va_start(a, fmt);
-    NSString *s = [[NSString alloc] initWithFormat:fmt arguments:a];
-    va_end(a);
-    NSString *line = [s stringByAppendingString:@"\n"];
-    FILE *f = fopen(LOGPATH.fileSystemRepresentation, "a");
-    if (f) { fputs(line.UTF8String, f); fclose(f); }
+    root = r.location != NSNotFound ? [exe substringToIndex:r.location] : @"/var/jb";
+    return root;
 }
 
 static NSDictionary *ReadDict(NSString *p) {
@@ -44,78 +28,108 @@ static NSDictionary *ReadDict(NSString *p) {
     return [o isKindOfClass:[NSDictionary class]] ? o : nil;
 }
 
-/* bundle id -> data container path */
-static NSDictionary *Containers(void) {
+/* bundle id -> data container path, cached (enumeration is the expensive part). */
+static NSDictionary *Containers(BOOL refresh) {
+    static NSDictionary *cached = nil;
+    static time_t built = 0;
+    if (!refresh && cached && time(NULL) - built < 300) return cached;
+
     NSMutableDictionary *m = [NSMutableDictionary dictionary];
     NSString *root = @"/var/mobile/Containers/Data/Application";
     for (NSString *uuid in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:root error:nil]) {
-        NSString *dir = [root stringByAppendingPathComponent:uuid];
-        NSDictionary *meta = ReadDict([dir stringByAppendingPathComponent:
-                                       @".com.apple.mobile_container_manager.metadata.plist"]);
-        NSString *bid = meta[@"MCMMetadataIdentifier"];
-        if ([bid isKindOfClass:[NSString class]] && bid.length) m[bid] = dir;
+        @autoreleasepool {
+            NSString *dir = [root stringByAppendingPathComponent:uuid];
+            NSDictionary *meta = ReadDict([dir stringByAppendingPathComponent:
+                                           @".com.apple.mobile_container_manager.metadata.plist"]);
+            NSString *bid = meta[@"MCMMetadataIdentifier"];
+            if ([bid isKindOfClass:[NSString class]] && bid.length) m[bid] = dir;
+        }
     }
-    return m;
+    cached = m;
+    built = time(NULL);
+    return cached;
 }
 
 static NSSet *InjectedApps(void) {
-    NSDictionary *f = ReadDict(JBRoot());
+    NSDictionary *f = ReadDict([JBRoot() stringByAppendingPathComponent:@"usr/lib/TweakInject/jbb.plist"]);
     NSArray *bundles = f[@"Filter"][@"Bundles"];
     return [bundles isKindOfClass:[NSArray class]] ? [NSSet setWithArray:bundles] : nil;
 }
 
-static void Publish(void) {
-    NSDictionary *prefs = ReadDict(PREFS) ?: ReadDict(PREFS_OLD);
-    if (!prefs) { Log(@"prefs unreadable"); return; }
-    NSSet *injected = InjectedApps();
-    if (!injected.count) { Log(@"filter unreadable: %@", JBRoot()); return; }
-    Log(@"publish: injected=%lu prefs=%lu", (unsigned long)injected.count, (unsigned long)prefs.count);
-
-    NSDictionary *profiles = prefs[@"profiles"];
-    if (![profiles isKindOfClass:[NSDictionary class]]) profiles = @{};
-
-    NSDictionary *containers = Containers();
-    Log(@"containers=%lu", (unsigned long)containers.count);
-    int written = 0;
-    for (NSString *bid in containers) {
-        if (![injected containsObject:bid]) continue;
-        NSMutableDictionary *cfg = [NSMutableDictionary dictionary];
-        if (prefs[@"globalEnabled"]) cfg[@"globalEnabled"] = prefs[@"globalEnabled"];
-        if (prefs[@"globalExtraTokens"]) cfg[@"globalExtraTokens"] = prefs[@"globalExtraTokens"];
-        id p = profiles[bid];
-        cfg[@"profiles"] = [p isKindOfClass:[NSDictionary class]] ? @{ bid: p } : @{};
-
-        NSString *dir = [[containers[bid] stringByAppendingPathComponent:@"Documents"]
-                         stringByAppendingPathComponent:@"jbb"];
-        [[NSFileManager defaultManager] createDirectoryAtPath:dir
-                                  withIntermediateDirectories:YES attributes:nil error:NULL];
-        NSString *path = [dir stringByAppendingPathComponent:@"config.plist"];
-        NSData *data = [NSPropertyListSerialization dataWithPropertyList:cfg
-                                                                 format:NSPropertyListXMLFormat_v1_0
-                                                                options:0 error:NULL];
-        [data writeToFile:path atomically:YES];
-        chown(path.fileSystemRepresentation, 501, 501);
-        chmod(path.fileSystemRepresentation, 0644);
-        written++;
-    }
-
-    /* Stamp completion so Settings can wait for the publish before restarting
-     * the app. Lives in the prefs bundle because Settings can always read it. */
+static void WriteStatus(void) {
     char buf[64];
     snprintf(buf, sizeof(buf), "ts=%ld\n", (long)time(NULL));
-    NSString *sp = StatusPath();
-    FILE *sf = fopen(sp.fileSystemRepresentation, "w");
-    if (sf) { fputs(buf, sf); fclose(sf); chmod(sp.fileSystemRepresentation, 0644); }
+    NSString *sp = [JBRoot() stringByAppendingPathComponent:
+                    @"Library/PreferenceBundles/JBBPrefs.bundle/jbbd.status"];
+    FILE *f = fopen(sp.fileSystemRepresentation, "w");
+    if (f) { fputs(buf, f); fclose(f); chmod(sp.fileSystemRepresentation, 0644); }
+}
+
+static void Publish(BOOL refreshContainers) {
+    @autoreleasepool {
+        NSDictionary *prefs = ReadDict(PREFS) ?: ReadDict(PREFS_OLD);
+        if (!prefs) return;
+        NSSet *injected = InjectedApps();
+        if (!injected.count) return;
+
+        NSDictionary *profiles = prefs[@"profiles"];
+        if (![profiles isKindOfClass:[NSDictionary class]]) profiles = @{};
+        NSNumber *gEnabled = prefs[@"globalEnabled"];
+        NSNumber *gExtra = prefs[@"globalExtraTokens"];
+
+        NSDictionary *containers = Containers(refreshContainers);
+        for (NSString *bid in containers) {
+            if (![injected containsObject:bid]) continue;
+            @autoreleasepool {
+                NSMutableDictionary *cfg = [NSMutableDictionary dictionaryWithCapacity:3];
+                if (gEnabled) cfg[@"globalEnabled"] = gEnabled;
+                if (gExtra) cfg[@"globalExtraTokens"] = gExtra;
+                id p = profiles[bid];
+                cfg[@"profiles"] = [p isKindOfClass:[NSDictionary class]] ? @{ bid: p } : @{};
+
+                NSString *dir = [[containers[bid] stringByAppendingPathComponent:@"Documents"]
+                                 stringByAppendingPathComponent:@"jbb"];
+                NSData *data = [NSPropertyListSerialization dataWithPropertyList:cfg
+                                                                          format:NSPropertyListBinaryFormat_v1_0
+                                                                         options:0 error:NULL];
+                if (!data) continue;
+                NSString *path = [dir stringByAppendingPathComponent:@"config.plist"];
+                if (![data writeToFile:path atomically:YES]) {
+                    [[NSFileManager defaultManager] createDirectoryAtPath:dir
+                                              withIntermediateDirectories:YES attributes:nil error:NULL];
+                    [data writeToFile:path atomically:YES];
+                }
+                chown(path.fileSystemRepresentation, 501, 501);
+                chmod(path.fileSystemRepresentation, 0644);
+            }
+        }
+        WriteStatus();
+    }
 }
 
 int main(int argc, char **argv) {
     @autoreleasepool {
-        if (argc > 1 && !strcmp(argv[1], "--once")) { Publish(); return 0; }
-        /* Republish unconditionally: the config file is tiny and this avoids
-         * mtime/namespace edge cases on roothide. */
+        if (argc > 1 && !strcmp(argv[1], "--once")) { Publish(YES); return 0; }
+
+        struct stat st;
+        time_t lastMtime = 0, lastSize = 0, lastPublish = 0;
+        Publish(YES);
+        lastPublish = time(NULL);
         while (1) {
-            Publish();
             sleep(3);
+            @autoreleasepool {
+                BOOL changed = NO;
+                if (stat(PREFS.fileSystemRepresentation, &st) == 0 &&
+                    (st.st_mtime != lastMtime || st.st_size != lastSize)) {
+                    lastMtime = st.st_mtime; lastSize = st.st_size; changed = YES;
+                }
+                /* Only do the 84-app rewrite when the config changed, plus a
+                 * 5-minute heartbeat to pick up newly installed apps. */
+                if (changed || time(NULL) - lastPublish >= 300) {
+                    Publish(changed);
+                    lastPublish = time(NULL);
+                }
+            }
         }
     }
     return 0;
