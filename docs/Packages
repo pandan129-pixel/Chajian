@@ -1,6 +1,6 @@
 Package: com.bandarhl.bhtwitter
 Name: BHTwitter / NFX 7.2 (X 12.39 适配)
-Version: 7.2-13
+Version: 7.2-14
 Architecture: iphoneos-arm64
 Section: Tweaks
 Priority: optional
@@ -9,20 +9,20 @@ Author: BandarHL / NFX
 Depends: firmware (>= 14.0), mobilesubstrate
 Conflicts: com.nfb.tweak
 Replaces: com.nfb.tweak
-Installed-Size: 2848
+Installed-Size: 2852
 Description: BHTwitter / NFX 7.2，适配 X 12.39
  跳过 12.38+ 已删除的 T1TabView.titleLabel KVC，修复启动闪退。
  内置 0NFBBundleFix：把 7.2 的 440 条中文资源复制到 X data container。
  在 X 设置页新增 NFX 分组/入口；双指长按可备用打开 7.2 设置。
-Filename: ./debs/com.bandarhl.bhtwitter_7.2-13_iphoneos-arm64.deb
-Size: 1005468
-MD5sum: d9f065a941733a0b4686ac9f0a94d267
-SHA1: d91988c30a8bb11fc9768486cf2010f4bc5db3b0
-SHA256: 10ff7e94f04384e809e576c824767f7c469b787b7df5abe0e180cfaca9d96707
+Filename: ./debs/com.bandarhl.bhtwitter_7.2-14_iphoneos-arm64.deb
+Size: 1006406
+MD5sum: a5fa7715fa6b8c5c53f7943b348df3ee
+SHA1: 1d94f42dfdfb40a84ce23323453f2aa86dcb3a6d
+SHA256: db2deaf1ce213b711a510d62c2ed389721c27421c0a320f89c1772db015baf02
 
 Package: com.bandarhl.bhtwitter
 Name: BHTwitter / NFX 7.2 (X 12.39 适配)
-Version: 7.2-13
+Version: 7.2-14
 Architecture: iphoneos-arm64e
 Section: Tweaks
 Priority: optional
@@ -32,16 +32,16 @@ Depends: firmware (>= 14.0), mobilesubstrate
 Pre-Depends: rootless-compat (>= 0.9)
 Conflicts: com.nfb.tweak
 Replaces: com.nfb.tweak
-Installed-Size: 2848
+Installed-Size: 2852
 Description: BHTwitter / NFX 7.2，适配 X 12.39
  跳过 12.38+ 已删除的 T1TabView.titleLabel KVC，修复启动闪退。
  内置 0NFBBundleFix：把 7.2 的 440 条中文资源复制到 X data container。
  在 X 设置页新增 NFX 分组/入口；双指长按可备用打开 7.2 设置。
-Filename: ./debs/com.bandarhl.bhtwitter_7.2-13_iphoneos-arm64e.deb
-Size: 1005276
-MD5sum: 24580a22dcfeae0158d8fbdd860cc434
-SHA1: c62e697e2ff377be812140a87e423f99723b92ef
-SHA256: 61c9a03497220c31e486ad1a074387f66e3559cdb3fc7c5ad23518d15a7d8701
+Filename: ./debs/com.bandarhl.bhtwitter_7.2-14_iphoneos-arm64e.deb
+Size: 1006214
+MD5sum: 1955950aad15e5afe027f88d02bb9b8e
+SHA1: 00b1401bb3e7d80ed33a8f734a2a9f5e1ccdd393
+SHA256: bd7ca1554f285d51fb3ad004032600b92f77b6becc3673566199c830a913793a
 
 Package: com.pandan.amapsplash
 Name: 高德地图 NoAds (Pandan)
