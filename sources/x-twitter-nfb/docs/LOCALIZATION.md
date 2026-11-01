@@ -200,10 +200,14 @@ options:(NSRegularExpressionCaseInsensitive |
 "转帖" = "转推";
 ```
 
-### 4.4 语言层（可选：强制中文）
+### 4.4 语言层（7.3.0-7 默认强制中文）
 
-默认跟随 X 的 App 语言。如果希望“X 是英文也显示中文”，在
-`BHTBundle.m` 的 `localizedStringForKey:` 里优先加载 `zh-Hans.lproj`：
+7.3.0-7 的 `0NFBBundleFix.dylib` 默认会 hook
+`-[BHTBundle localizedStringForKey:]`，优先查 `zh-Hans.lproj`，所以即使 X 是英文，
+NFB 设置页也显示中文。要关闭：在 X 的偏好里写 `NFBForceChinese = NO`
+（`defaults write com.atebits.Tweetie2 NFBForceChinese -bool NO`）。
+
+源码级等价写法：
 
 ```objc
 - (NSString*)localizedStringForKey:(NSString*)key {

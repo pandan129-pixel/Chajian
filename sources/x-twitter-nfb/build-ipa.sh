@@ -14,7 +14,7 @@ IPA=${1:-$HOME/Downloads/X_Twitter_12.39_NFB730_秋名山.ipa}
 DIST="$ROOT/dist"
 DPKG_DEB="$ROOT/../../.buildtools/dpkg-deb"
 PACKAGE=com.nfb.tweak
-VERSION=7.3.0-7
+VERSION=7.3.0-17
 XVER=12.39
 
 ROOTHIDE_SUBSTRATE='@loader_path/.jbroot/usr/lib/libsubstrate.dylib'
@@ -118,10 +118,37 @@ PLIST
         echo " 从 X $XVER NFB730 IPA 提取；T1TabView 改用 applyTintColor:，"
         echo " 不再调用已删除的 _t1_updateTitleLabel / titleLabel KVC。"
         echo " 简体中文已补 zh-Hans.lproj（iOS 现代语言码），并修正术语/文案。"
-        echo " 内置 0NFBBundleFix.dylib：自动定位 BHTwitter.bundle，修 roothide 下显示 key 的问题。"
+        echo " 内置 0NFBBundleFix.dylib：自动定位 BHTwitter.bundle，并强制中文（NFBForceChinese=NO 可关闭）。"
 echo " 与旧 com.bandarhl.bhtwitter 冲突，安装时先移除旧版，避免双注入。"
     } > "$stage/DEBIAN/control"
     chmod 0644 "$stage/DEBIAN/control"
+
+    # roothide hides the jbroot from the app sandbox. Copy the resource bundle
+    # into X's data container, which the app can read.
+    cat > "$stage/DEBIAN/postinst" <<'SH'
+#!/bin/sh
+set -e
+SRC=""
+for s in "/Library/Application Support/BHT/BHTwitter.bundle" \
+         "/usr/lib/TweakInject/BHTwitter.bundle"; do
+    if [ -d "$s" ]; then SRC="$s"; break; fi
+done
+if [ -n "$SRC" ]; then
+    for meta in /var/mobile/Containers/Data/Application/*/.com.apple.mobile_container_manager.metadata.plist; do
+        [ -f "$meta" ] || continue
+        d=$(dirname "$meta")
+        if grep -qa "com.atebits.Tweetie2" "$meta" 2>/dev/null; then
+            dest="$d/Library/Application Support/BHT"
+            mkdir -p "$dest"
+            rm -rf "$dest/BHTwitter.bundle"
+            cp -R "$SRC" "$dest/BHTwitter.bundle"
+            chown -R mobile:mobile "$dest/BHTwitter.bundle" 2>/dev/null || true
+        fi
+    done
+fi
+exit 0
+SH
+    chmod 0755 "$stage/DEBIAN/postinst"
 
     out="$DIST/${PACKAGE}_${VERSION}_${arch}.deb"
     rm -f "$out"
