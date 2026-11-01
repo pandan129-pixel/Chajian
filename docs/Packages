@@ -1,6 +1,6 @@
 Package: com.bandarhl.bhtwitter
 Name: BHTwitter / NFX 7.2 (X 12.39 适配)
-Version: 7.2-11
+Version: 7.2-12
 Architecture: iphoneos-arm64
 Section: Tweaks
 Priority: optional
@@ -14,15 +14,15 @@ Description: BHTwitter / NFX 7.2，适配 X 12.39
  跳过 12.38+ 已删除的 T1TabView.titleLabel KVC，修复启动闪退。
  内置 0NFBBundleFix：把 7.2 的 440 条中文资源复制到 X data container。
  在 X 设置页新增 NFX 分组/入口；双指长按可备用打开 7.2 设置。
-Filename: ./debs/com.bandarhl.bhtwitter_7.2-11_iphoneos-arm64.deb
-Size: 1013026
-MD5sum: 466c2f45780e186bc4af238b1f0dc75f
-SHA1: 5941996a0f232eb2535c049ca2b8022a146f1ed1
-SHA256: de1e3a5e869837f82a2ec1cfff14c754ce09b86c932ccb684d11ec6ab3a72df2
+Filename: ./debs/com.bandarhl.bhtwitter_7.2-12_iphoneos-arm64.deb
+Size: 1012824
+MD5sum: 1c6b645c579fd2a43d55f4aacad5a9d9
+SHA1: 64a0b9acd631fe1ee1529afa6997c47c0f1ec275
+SHA256: 1a5f4aa81978a1ba173c703e28865ba35a144919cf693745f5134d938dbfc4f6
 
 Package: com.bandarhl.bhtwitter
 Name: BHTwitter / NFX 7.2 (X 12.39 适配)
-Version: 7.2-11
+Version: 7.2-12
 Architecture: iphoneos-arm64e
 Section: Tweaks
 Priority: optional
@@ -37,11 +37,11 @@ Description: BHTwitter / NFX 7.2，适配 X 12.39
  跳过 12.38+ 已删除的 T1TabView.titleLabel KVC，修复启动闪退。
  内置 0NFBBundleFix：把 7.2 的 440 条中文资源复制到 X data container。
  在 X 设置页新增 NFX 分组/入口；双指长按可备用打开 7.2 设置。
-Filename: ./debs/com.bandarhl.bhtwitter_7.2-11_iphoneos-arm64e.deb
-Size: 1012842
-MD5sum: 7f85ef169de9fa5555f8cb7240d0d2ed
-SHA1: 2105acf3c02120b5e17614dd55ce9f13d20a5777
-SHA256: 843011014394920de5c7e80ad308b50255a2aa38d08fcc943f2dd8b5a08564e4
+Filename: ./debs/com.bandarhl.bhtwitter_7.2-12_iphoneos-arm64e.deb
+Size: 1012636
+MD5sum: 301c5289ffa61c6d34820be27b046d67
+SHA1: 7e6eb99e5cdb2d52a6d694b10683f1d095f90525
+SHA256: 49520ac760949498a10c6ecd034e488791d8bec5a07a8eeae887cba98c61eaac
 
 Package: com.pandan.amapsplash
 Name: 高德地图 NoAds (Pandan)
