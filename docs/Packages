@@ -1,6 +1,6 @@
 Package: com.nfb.tweak
 Name: NeoFreeBird (X 12.39)
-Version: 7.3.0-5
+Version: 7.3.0-6
 Architecture: iphoneos-arm64
 Section: Tweaks
 Priority: optional
@@ -9,21 +9,22 @@ Author: NeoFreeBird
 Depends: firmware (>= 15.0), mobilesubstrate
 Conflicts: com.bandarhl.bhtwitter, com.den.twigalaxy, xyz.cypwn.twigalaxy, xyz.cypwn.bhtwitter, com.netskao.twitternoads, xyz.cypwn.bringbacktwitter
 Replaces: com.bandarhl.bhtwitter
-Installed-Size: 14660
+Installed-Size: 14732
 Description: NeoFreeBird 7.3.0（X 12.39 构建，已修 12.38+ T1TabView 崩溃，含简体中文汉化）
  从 X 12.39 NFB730 IPA 提取；T1TabView 改用 applyTintColor:，
  不再调用已删除的 _t1_updateTitleLabel / titleLabel KVC。
  简体中文已补 zh-Hans.lproj（iOS 现代语言码），并修正术语/文案。
+ 内置 0NFBBundleFix.dylib：自动定位 BHTwitter.bundle，修 roothide 下显示 key 的问题。
  与旧 com.bandarhl.bhtwitter 冲突，安装时先移除旧版，避免双注入。
-Filename: ./debs/com.nfb.tweak_7.3.0-5_iphoneos-arm64.deb
-Size: 5936748
-MD5sum: 66aa5ceacecfd074be44efb7aecfd7b8
-SHA1: 7c450ebe5321f0dd928b963b13f6ad8432be4f93
-SHA256: 79ef59d1637cb66c1092f62fe94fbcfb3d5644a5b0debe2458c7a13b2d78f2e7
+Filename: ./debs/com.nfb.tweak_7.3.0-6_iphoneos-arm64.deb
+Size: 5942442
+MD5sum: 098f2bdfa5cb7a29dea0af73428f930c
+SHA1: 2e909e6cd7bc3e4cea57d5202b5b17c67dc906bf
+SHA256: f1257626c3598c2a1feaf6a846faf36031998815d79e8e00326db6b140cab522
 
 Package: com.nfb.tweak
 Name: NeoFreeBird (X 12.39)
-Version: 7.3.0-5
+Version: 7.3.0-6
 Architecture: iphoneos-arm64e
 Section: Tweaks
 Priority: optional
@@ -33,17 +34,18 @@ Depends: firmware (>= 15.0), mobilesubstrate
 Pre-Depends: rootless-compat (>= 0.9)
 Conflicts: com.bandarhl.bhtwitter, com.den.twigalaxy, xyz.cypwn.twigalaxy, xyz.cypwn.bhtwitter, com.netskao.twitternoads, xyz.cypwn.bringbacktwitter
 Replaces: com.bandarhl.bhtwitter
-Installed-Size: 14660
+Installed-Size: 14732
 Description: NeoFreeBird 7.3.0（X 12.39 构建，已修 12.38+ T1TabView 崩溃，含简体中文汉化）
  从 X 12.39 NFB730 IPA 提取；T1TabView 改用 applyTintColor:，
  不再调用已删除的 _t1_updateTitleLabel / titleLabel KVC。
  简体中文已补 zh-Hans.lproj（iOS 现代语言码），并修正术语/文案。
+ 内置 0NFBBundleFix.dylib：自动定位 BHTwitter.bundle，修 roothide 下显示 key 的问题。
  与旧 com.bandarhl.bhtwitter 冲突，安装时先移除旧版，避免双注入。
-Filename: ./debs/com.nfb.tweak_7.3.0-5_iphoneos-arm64e.deb
-Size: 5936794
-MD5sum: 31942c1f3ca38ce5f918f2b0ceb18957
-SHA1: b2b0f9bbfac6982381b89513ca8ead37f66b33c9
-SHA256: a35604523d65894e17ff043e4266ea2744c117b5a83fbfa1ab8caa84a758dd73
+Filename: ./debs/com.nfb.tweak_7.3.0-6_iphoneos-arm64e.deb
+Size: 5942396
+MD5sum: 94e6d59f31427a80cec6a565805ce939
+SHA1: d4c986459ea2fc6842592b468899fd159280f3f2
+SHA256: 82d10b31d27627ad115148d6a57fcb0ad5ad987b550299361a228ffce6a30481
 
 Package: com.pandan.amapsplash
 Name: 高德地图 NoAds (Pandan)
