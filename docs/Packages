@@ -1,51 +1,45 @@
-Package: com.nfb.tweak
-Name: NeoFreeBird (X 12.39)
-Version: 7.3.0-17
+Package: com.bandarhl.bhtwitter
+Name: BHTwitter / NFX 7.2 (X 12.39 适配)
+Version: 7.2-1
 Architecture: iphoneos-arm64
 Section: Tweaks
 Priority: optional
 Maintainer: pandan (repack)
-Author: NeoFreeBird
-Depends: firmware (>= 15.0), mobilesubstrate
-Conflicts: com.bandarhl.bhtwitter, com.den.twigalaxy, xyz.cypwn.twigalaxy, xyz.cypwn.bhtwitter, com.netskao.twitternoads, xyz.cypwn.bringbacktwitter
-Replaces: com.bandarhl.bhtwitter
-Installed-Size: 14736
-Description: NeoFreeBird 7.3.0（X 12.39 构建，已修 12.38+ T1TabView 崩溃，含简体中文汉化）
- 从 X 12.39 NFB730 IPA 提取；T1TabView 改用 applyTintColor:，
- 不再调用已删除的 _t1_updateTitleLabel / titleLabel KVC。
- 简体中文已补 zh-Hans.lproj（iOS 现代语言码），并修正术语/文案。
- 内置 0NFBBundleFix.dylib：自动定位 BHTwitter.bundle，并强制中文（NFBForceChinese=NO 可关闭）。
- 与旧 com.bandarhl.bhtwitter 冲突，安装时先移除旧版，避免双注入。
-Filename: ./debs/com.nfb.tweak_7.3.0-17_iphoneos-arm64.deb
-Size: 5946170
-MD5sum: 88933e9a823f1fd101a1d05b94be0df2
-SHA1: 7c0583f0aca65d6255be53019e8762d4c084d7e2
-SHA256: 53a05b09fe9db2c5ffb311fe5b03e523223f745149ab3e751bb07a15a0ae8191
+Author: BandarHL / NFX
+Depends: firmware (>= 14.0), mobilesubstrate
+Conflicts: com.nfb.tweak
+Replaces: com.nfb.tweak
+Installed-Size: 2772
+Description: BHTwitter / NFX 7.2，适配 X 12.39
+ 跳过 12.38+ 已删除的 T1TabView.titleLabel KVC，修复启动闪退。
+ 内置 0NFBBundleFix：把 7.2 的 440 条中文资源复制到 X data container。
+Filename: ./debs/com.bandarhl.bhtwitter_7.2-1_iphoneos-arm64.deb
+Size: 996424
+MD5sum: 0ffafbbaffb23051bb915add60dfccc0
+SHA1: bd633947051e4165895ea47aaaeb2a9d4a659679
+SHA256: f7eba8cf41224bc63bc5288567672f4d36c4ea29e6a0727f3af3071e0d3f4fea
 
-Package: com.nfb.tweak
-Name: NeoFreeBird (X 12.39)
-Version: 7.3.0-17
+Package: com.bandarhl.bhtwitter
+Name: BHTwitter / NFX 7.2 (X 12.39 适配)
+Version: 7.2-1
 Architecture: iphoneos-arm64e
 Section: Tweaks
 Priority: optional
 Maintainer: pandan (repack)
-Author: NeoFreeBird
-Depends: firmware (>= 15.0), mobilesubstrate
+Author: BandarHL / NFX
+Depends: firmware (>= 14.0), mobilesubstrate
 Pre-Depends: rootless-compat (>= 0.9)
-Conflicts: com.bandarhl.bhtwitter, com.den.twigalaxy, xyz.cypwn.twigalaxy, xyz.cypwn.bhtwitter, com.netskao.twitternoads, xyz.cypwn.bringbacktwitter
-Replaces: com.bandarhl.bhtwitter
-Installed-Size: 14736
-Description: NeoFreeBird 7.3.0（X 12.39 构建，已修 12.38+ T1TabView 崩溃，含简体中文汉化）
- 从 X 12.39 NFB730 IPA 提取；T1TabView 改用 applyTintColor:，
- 不再调用已删除的 _t1_updateTitleLabel / titleLabel KVC。
- 简体中文已补 zh-Hans.lproj（iOS 现代语言码），并修正术语/文案。
- 内置 0NFBBundleFix.dylib：自动定位 BHTwitter.bundle，并强制中文（NFBForceChinese=NO 可关闭）。
- 与旧 com.bandarhl.bhtwitter 冲突，安装时先移除旧版，避免双注入。
-Filename: ./debs/com.nfb.tweak_7.3.0-17_iphoneos-arm64e.deb
-Size: 5946188
-MD5sum: 97061b208a62c1a4873f282f3206270d
-SHA1: d9ceceb74e564c0d241c17f00cf67cd1ab5a9aa5
-SHA256: b3f98bedabb497557a22599c66d048fbd04625523a41b325ffc858342a9e20d8
+Conflicts: com.nfb.tweak
+Replaces: com.nfb.tweak
+Installed-Size: 2772
+Description: BHTwitter / NFX 7.2，适配 X 12.39
+ 跳过 12.38+ 已删除的 T1TabView.titleLabel KVC，修复启动闪退。
+ 内置 0NFBBundleFix：把 7.2 的 440 条中文资源复制到 X data container。
+Filename: ./debs/com.bandarhl.bhtwitter_7.2-1_iphoneos-arm64e.deb
+Size: 996252
+MD5sum: 033cc0e9c6d12f2b635f74d99026ade3
+SHA1: 180a5196c5fb7d8d261c72c7cf54c55afb948a62
+SHA256: e3edb558dd7d092d9abd438961f3a3254b76700d7ea24183dafd92f5b1275ac5
 
 Package: com.pandan.amapsplash
 Name: 高德地图 NoAds (Pandan)
