@@ -1,0 +1,17 @@
+Package: com.nfb.tweak
+Name: NeoFreeBird (X @XVER@)
+Version: @VERSION@
+Architecture: @ARCH@
+Section: Tweaks
+Priority: optional
+Maintainer: pandan (repack)
+Author: NeoFreeBird
+Depends: firmware (>= 15.0), mobilesubstrate
+Conflicts: com.bandarhl.bhtwitter, com.den.twigalaxy, xyz.cypwn.twigalaxy, xyz.cypwn.bhtwitter, com.netskao.twitternoads, xyz.cypwn.bringbacktwitter
+Replaces: com.bandarhl.bhtwitter
+@PRE_DEPENDS@Installed-Size: @INSTALLED_SIZE@
+Description: NeoFreeBird 7.3.0（X @XVER@ 构建，已修 12.38+ T1TabView 崩溃，含简体中文汉化）
+ 从 X @XVER@ NFB730 IPA 提取；T1TabView 改用 applyTintColor:，
+ 不再调用已删除的 _t1_updateTitleLabel / titleLabel KVC。
+ 简体中文已补 zh-Hans.lproj（iOS 现代语言码），并修正术语/文案。
+ 与旧 com.bandarhl.bhtwitter 冲突，安装时先移除旧版，避免双注入。

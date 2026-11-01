@@ -1,0 +1,78 @@
+{
+  "name": "NeoFreeBird",
+  "subtitle": "A modified Twitter app with BHTwitter and other QoL modifications.",
+  "iconURL": "https://raw.githubusercontent.com/NeoFreeBird/app/v7/resources/x_icon_rounded.png",
+  "headerURL": "https://pbs.twimg.com/profile_banners/1878595268255297537/1755453861/1500x500",
+  "website": "https://github.com/orionblur/NeoFreeBird",
+  "tintColor": "#000000",
+  "apps": [
+    {
+      "name": "X",
+      "bundleIdentifier": "com.atebits.Tweetie2",
+      "developerName": "actuallyaridan, orionblur, nyaathea",
+      "subtitle": "NeoFreeBird version 7.2.0",
+      "localizedDescription": "NeoFreeBird, looking like the modern X app.",
+      "iconURL": "https://raw.githubusercontent.com/orionblur/NeoFreeBird/v7/resources/x_icon_rounded.png",
+      "tintColor": "#000000",
+      "category": "lifestyle",
+      "screenshots": [
+        "https://raw.githubusercontent.com/NeoFreeBird/app/v7/resources/timeline/timeline1.png",
+        "https://raw.githubusercontent.com/NeoFreeBird/app/v7/resources/timeline/timeline2.png",
+        "https://raw.githubusercontent.com/NeoFreeBird/app/v7/resources/timeline/timeline3.png",
+        "https://raw.githubusercontent.com/NeoFreeBird/app/v7/resources/timeline/timeline4.png",
+        "https://raw.githubusercontent.com/NeoFreeBird/app/v7/resources/timeline/timeline5.png"
+      ],
+      "versions": [
+        {
+          "version": "12.33",
+          "buildVersion": "31",
+          "date": "2026-10-16T19:25:42Z",
+          "downloadURL": "https://github.com/NeoFreeBird/app/releases/download/v7.2.0/NeoFreeBird-sideloaded-X_7.2.0_12.33.ipa",
+          "size": 262415275,
+          "minOSVersion": "15.0",
+          "localizedDescription": "New Features\n- Added an option to choose the default reply sort\n- Updated X to 12.33\n- Added an option to hide retweets and quotes from the “For You” page\n- Added option to convert t.co links and remove link tracking\n- Updated NFB settings to use the new settings design. You now hold the bird (or X) on the For You page to access NFB settings\n- Brought back the Tweet source labels!\n- Removed the “Money” tab\n- Enabling the option to hide views now also hides it in the tweet footer.\n\nFixes\n- Fixed more webview issues\n- NeoFreeBird now more reliably filters out video ads\n- Fixed hiding both the “Follow” and “Message” button on tweets\n- Tweaked the wording of the “Reply in web view” option to highlight it’s a fallback\n- Added localization support for the “Show quote numbers option”\n- Fixed the app crashing when adding more than 1 account"
+        },
+        {
+          "version": "12.31.1",
+          "buildVersion": "1",
+          "date": "2026-10-10T23:55:36Z",
+          "downloadURL": "https://github.com/NeoFreeBird/app/releases/download/v7.1.1/NeoFreeBird-sideloaded-X_7.1.1_12.31.1.ipa",
+          "size": 260421912,
+          "minOSVersion": "15.0",
+          "localizedDescription": "Merged orionblur’s fork back into the main repo."
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [
+          "aps-environment",
+          "com.apple.developer.siri",
+          "com.apple.developer.applesignin",
+          "com.apple.developer.payment-pass-provisioning",
+          "com.apple.developer.usernotifications.communication",
+          "com.apple.developer.usernotifications.time-sensitive",
+          "com.apple.developer.pass-type-identifiers",
+          "com.apple.developer.devicecheck.appattest-environment",
+          "com.apple.developer.networking.carrier-constrained.app-optimized",
+          "keychain-access-groups",
+          "com.apple.security.application-groups",
+          "com.apple.developer.associated-appclip-app-identifiers",
+          "com.apple.developer.networking.carrier-constrained.appcategory",
+          "com.apple.developer.associated-domains"
+        ],
+        "privacy": {
+          "NSCalendarsUsageDescription": "Add events to your calendar from X.",
+          "NSCameraUsageDescription": "Capture and post photos and videos from X.",
+          "NSContactsUsageDescription": "We will securely upload your contacts to our servers to help you connect with friends and suggest users to follow on X.",
+          "NSFaceIDUsageDescription": "Use FaceID to authenticate on X.",
+          "NSLocationUsageDescription": "Enjoy the X experience tailored to your location.",
+          "NSLocationWhenInUseUsageDescription": "Enjoy the X experience tailored to your location.",
+          "NSMicrophoneUsageDescription": "Capture and post videos with sound from X.",
+          "NSPhotoLibraryAddUsageDescription": ">This lets you download photos and videos to your Photos.",
+          "NSPhotoLibraryUsageDescription": "Allow access to share photos from your camera roll.",
+          "NSSpeechRecognitionUsageDescription": "Going forward, whenever you choose to share captions on this device, Apple will provide the service. Doing so helps make sure people of all hearing abilities can access your content.",
+          "NSUserTrackingUsageDescription": "This helps X show you more relevant ads."
+        }
+      }
+    }
+  ]
+}

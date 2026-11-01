@@ -12,7 +12,7 @@ DST="$WS/repo/sources"
 echo "[sources] $WS -> $DST"
 mkdir -p "$DST"
 # 只重建由本脚本管理的四个项目，保留 sources/ 下其它手工目录
-for p in jbb xianyu-duo crash-analyzer-pro amap-splash; do
+for p in jbb xianyu-duo crash-analyzer-pro amap-splash x-twitter-nfb; do
     rm -rf "$DST/$p"
 done
 rm -f "$DST/README.md"
@@ -61,9 +61,20 @@ for p in src packaging scripts tools; do
 done
 cp "$WS/plugins/amap-splash/docs/"*.md "$DST/amap-splash/docs/"
 
+# ---- x-twitter-nfb ---------------------------------------------------
+mkdir -p "$DST/x-twitter-nfb"
+cp "$WS/plugins/x-twitter-nfb/README.md" "$WS/plugins/x-twitter-nfb/SOURCE-MAP.md" \
+   "$WS/plugins/x-twitter-nfb/build-ipa.sh" "$WS/plugins/x-twitter-nfb/build.sh" \
+   "$DST/x-twitter-nfb/"
+for p in packaging l10n docs src; do
+    [ -d "$WS/plugins/x-twitter-nfb/$p" ] && \
+        copy_dir "plugins/x-twitter-nfb/$p" "x-twitter-nfb/$p"
+done
+
 # ---- clean + sanitize ------------------------------------------------
 find "$DST" -name '.DS_Store' -delete
 find "$DST" -type d -name '.theos' -exec rm -rf {} + 2>/dev/null || true
+find "$DST" -type d -name '.git' -exec rm -rf {} + 2>/dev/null || true
 
 python3 - "$DST" <<'PY'
 import os
@@ -76,6 +87,7 @@ text_ext = {'.m', '.h', '.c', '.mm', '.swift', '.py', '.sh', '.md', '.plist',
 text_names = {'Makefile', 'control', 'prerm'}
 
 ip = re.compile(r'\b192\.168\.\d{1,3}\.\d{1,3}\b')
+userpath = re.compile(r"/Users/[^/\s\"'`]+")
 changed = []
 
 for dirpath, _, files in os.walk(root):
@@ -90,6 +102,12 @@ for dirpath, _, files in os.walk(root):
         except UnicodeDecodeError:
             continue
         new = ip.sub('DEVICE_IP', src)
+        if path.endswith('/x-twitter-nfb/build-ipa.sh'):
+            new = re.sub(
+                r'IPA=\$\{1:-/Users/[^}]+\}',
+                'IPA=${1:-$HOME/Downloads/X_Twitter_12.39_NFB730_秋名山.ipa}',
+                new, count=1)
+        new = userpath.sub('~', new)
         if new != src:
             with open(path, 'w', encoding='utf-8') as fh:
                 fh.write(new)

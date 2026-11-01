@@ -1,6 +1,6 @@
 # roothide / Dopamine-roothide 3.x —— 进程 / 文件系统 / 守护进程层的隐藏与反检测
 
-- 目标仓库：`/Users/dan/Desktop/iphone/rd-3x`，commit `24ea745`（"add roothide support for Dopamine 3"）
+- 目标仓库：`~/Desktop/iphone/rd-3x`，commit `24ea745`（"add roothide support for Dopamine 3"）
 - 分析对象：iPhone 14 Pro（A16，arm64e）/ iOS 16.3.1，已越狱
 - 性质：**只读源码分析**，未修改源码、未接触设备。文中所有“可检测”结论都标注了证据强度。
 - 标注约定：

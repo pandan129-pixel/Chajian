@@ -21,7 +21,7 @@ DYLIB = os.path.join(BUILD, "CrashAnalyzerPro.dylib")
 BUNDLE_REL = "Library/PreferenceBundles/CrashAnalyzerPrefs.bundle"
 BUNDLE_BIN = "CrashAnalyzerPrefs"
 EMBEDDED_DYLIB = "CrashAnalyzerPro.dylib"
-LDID = os.environ.get("LDID", "/Users/dan/Desktop/iphone/.buildtools/ldid")
+LDID = os.environ.get("LDID", "~/Desktop/iphone/.buildtools/ldid")
 
 with open(os.path.join(ROOT, "packaging", "control"), encoding="utf-8") as fh:
     CONTROL_TEMPLATE = fh.read()

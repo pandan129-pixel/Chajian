@@ -3,7 +3,7 @@
 - 设备：iPhone 14 Pro（iPhone15,2，A16 / t8120，arm64e）
 - 系统：iOS 16.3.1（Build **20D67**）
 - 现状：已越狱，RootHide（roothide 的 Dopamine 2.x，bootstrap 走 roothide Procursus）
-- 核查对象：`roothide/Dopamine-roothide`，本地源码 `/Users/dan/Desktop/iphone/rd-3x`，commit `24ea745`（root commit，导出树）
+- 核查对象：`roothide/Dopamine-roothide`，本地源码 `~/Desktop/iphone/rd-3x`，commit `24ea745`（root commit，导出树）
 - 上游基线：`opa334/Dopamine` 3.x 分支 `13b26789`（= 3.0.12）；roothide 基线 basebin `.version = 3.0.12`、`.version-roothide = 28`
 - 官方 3.x release：tag **`28`**，release 名 **`3.x`**，发布于 **2026-10-24T20:45:36Z**（commit `e180427d`，与本地关键文件逐字节一致）
 - 核查时间：2026-10-24
@@ -273,7 +273,7 @@ GitHub API 实查：
 
 ## 9. 证据索引
 
-源码（本地 `/Users/dan/Desktop/iphone/rd-3x`，commit `24ea745`）：
+源码（本地 `~/Desktop/iphone/rd-3x`，commit `24ea745`）：
 
 - `Application/Dopamine/Jailbreak/DOEnvironmentManager.m:218-224` — isArm64e
 - `Application/Dopamine/Jailbreak/DOEnvironmentManager.m:226-244` — isSPTM（iOS 17+ 且需 SPTM+TXM）

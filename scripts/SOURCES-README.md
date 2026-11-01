@@ -8,12 +8,15 @@
 | `xianyu-duo/` | `com.pandan.xianyuduo` | 闲鱼 | 开屏/信息流广告、我的页净化、原图/视频存图 |
 | `crash-analyzer-pro/` | `com.pandan.crashanalyzerpro` | 设置 / 日志 | 日志批量删除 + DeepSeek 直连分析 |
 | `amap-splash/` | `com.pandan.amapsplash` | 高德地图 | 开屏/实时广告与启动弹窗 |
+| `x-twitter-nfb/` | `com.nfb.tweak` | X (Twitter) | NeoFreeBird 7.3.0 重打包 + 简体中文汉化（上游 GPL-3.0） |
 
 ## 构建
 
 - Xcode + iPhoneOS SDK（`xcrun --sdk iphoneos --show-sdk-path`）
 - 签名都是 ad-hoc（`codesign -f -s -`），装到真机由越狱环境接管
 - `jbb/prefs` 的设置界面需要 **Theos + ldid**（`THEOS` 指向你的 theos 目录）
+- `x-twitter-nfb` 的上游源码在 `src/NeoFreeBird-7.3.0/`，构建需要 Theos 和
+  `.gitmodules` 里的依赖；`build-ipa.sh` 重打包需要 X 12.39 IPA 和 `dpkg-deb`
 - 目标架构：roothide 用 `iphoneos-arm64e`，rootless 用 `iphoneos-arm64`
 
 每个目录的 `README.md` 里有各自的构建、打包、安装命令。

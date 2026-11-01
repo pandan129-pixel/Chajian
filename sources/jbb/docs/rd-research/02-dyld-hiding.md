@@ -1,6 +1,6 @@
 # roothide / Dopamine-roothide 3.x — dyld 层隐藏机制分析
 
-- 分析对象：`/Users/dan/Desktop/iphone/rd-3x`，commit `24ea745`（"add roothide support for Dopamine 3"），工作树干净（`git status` 无改动）
+- 分析对象：`~/Desktop/iphone/rd-3x`，commit `24ea745`（"add roothide support for Dopamine 3"），工作树干净（`git status` 无改动）
 - 目标设备：iPhone 14 Pro / iOS 16.3.1（arm64e，A16，无 SPTM —— `SPTMArgs` 符号在 A17/iOS 17 才出现，故 `forceCSAdhoc=false`；代码走 `pmap_cs` 分支）
 - 性质：只读源码分析，未上机验证；所有"运行时行为"结论均从代码路径推导
 - 标记约定：
@@ -24,7 +24,7 @@
 `_dyld_get_image_name(i)` 前缀匹配 `"/usr/lib/systemhook-"` 来判定"这是 roothide 1.x 越狱"。
 如果镜像真的被隐藏了，这段代码永远命中不了。**→ 注入镜像对 dyld API 完全可见。**
 
-另外需要指出：`/Users/dan/Desktop/iphone/rd27`（同一台机器上的 **本地改动工作树**，`git status` 显示 `BaseBin/systemhook/src/main.c` 有 +92 行未提交改动）里确实存在一个"隐藏镜像名"的原型：hook `_dyld_get_image_name` + `dladdr`，把命中黑名单的路径改写成 `"/usr/lib/libSystem.B.dylib"`（`rd27/BaseBin/systemhook/src/main.c:313-337, 384-400`）。**它不在 24ea745 里**，详见 §1.6。
+另外需要指出：`~/Desktop/iphone/rd27`（同一台机器上的 **本地改动工作树**，`git status` 显示 `BaseBin/systemhook/src/main.c` 有 +92 行未提交改动）里确实存在一个"隐藏镜像名"的原型：hook `_dyld_get_image_name` + `dladdr`，把命中黑名单的路径改写成 `"/usr/lib/libSystem.B.dylib"`（`rd27/BaseBin/systemhook/src/main.c:313-337, 384-400`）。**它不在 24ea745 里**，详见 §1.6。
 
 ---
 
@@ -118,7 +118,7 @@
 
 ### 1.6 【旁证】rd27 里的"镜像名过滤"原型（不属于本 commit）
 
-`/Users/dan/Desktop/iphone/rd27/BaseBin/systemhook/src/main.c`（未提交，+92 行）实现了：
+`~/Desktop/iphone/rd27/BaseBin/systemhook/src/main.c`（未提交，+92 行）实现了：
 
 - `jb_is_bad_path()`：路径含 `systemhook/jbroot/roothide/TweakInject/frida/Substrate/cycript/ellekit/libsandy/jbb` 即命中（`:313-320`）
 - `jb_raw_image_name()`：直接读 `task_info(TASK_DYLD_INFO)` → `dyld_all_image_infos->infoArray[index].imageFilePath`（`:322-329`）
@@ -128,7 +128,7 @@
 
 它是 **API 层 hook**，不是链表手术，而且有 4 个明显破绽（留给 §6）：
 `_dyld_image_count` 没变、`_dyld_get_image_header` 没变、`dyld_all_image_infos` 可以直接读、多个 `libSystem.B.dylib` 重名。
-（另：`/Users/dan/Desktop/iphone/roothide-src/BaseBin/systemhook/src/main.c:356-420, 508-524` 是同一思路的更早版本，含 `JBHIDE_MARKER_V1` 字符串。）
+（另：`~/Desktop/iphone/roothide-src/BaseBin/systemhook/src/main.c:356-420, 508-524` 是同一思路的更早版本，含 `JBHIDE_MARKER_V1` 字符串。）
 
 ---
 
@@ -492,4 +492,4 @@ Application/Dopamine/Jailbreak/DOBootstrapper.m jbroot 目录与 jbrand
 Application/Dopamine/Jailbreak/DOJailbreaker.m  启动流程 / dyld_patch 默认值
 ```
 
-（旁证，不属于本 commit：`/Users/dan/Desktop/iphone/rd27/BaseBin/systemhook/src/main.c`、`/Users/dan/Desktop/iphone/roothide-src/BaseBin/systemhook/src/main.c`）
+（旁证，不属于本 commit：`~/Desktop/iphone/rd27/BaseBin/systemhook/src/main.c`、`~/Desktop/iphone/roothide-src/BaseBin/systemhook/src/main.c`）

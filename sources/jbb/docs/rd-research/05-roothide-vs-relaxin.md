@@ -1,8 +1,8 @@
 # 05 — roothide 3.x vs relaxin 现状：防检测 / 隐藏能力逐项对比
 
 > 日期：2026-10-24
-> roothide 基线：`/Users/dan/Desktop/iphone/rd-3x`，commit `24ea745`（"add roothide support for Dopamine 3"），只读分析。
-> relaxin 基线：`/Users/dan/Desktop/iphone/relaxin-src`（15 个文件：4 个 engine + 11 个 vendor 子集）。
+> roothide 基线：`~/Desktop/iphone/rd-3x`，commit `24ea745`（"add roothide support for Dopamine 3"），只读分析。
+> relaxin 基线：`~/Desktop/iphone/relaxin-src`（15 个文件：4 个 engine + 11 个 vendor 子集）。
 > jb-bypass 基线：`HANDOVER.md`、`docs/S2-detection-matrix.md`、`reports/S10`、`S13`、`S14`。
 > 方法：纯静态源码对照；**未修改任何源码、未连接设备**。
 >

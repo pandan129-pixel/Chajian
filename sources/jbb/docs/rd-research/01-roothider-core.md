@@ -1,6 +1,6 @@
 # roothide 3.x 核心隐藏架构分析
 
-- 目标仓库：`/Users/dan/Desktop/iphone/rd-3x`
+- 目标仓库：`~/Desktop/iphone/rd-3x`
 - commit：`24ea745 add roothide support for Dopamine 3`（浅克隆，仅此一个提交）
 - 设备背景：iPhone 14 Pro / iOS 16.3.1（arm64e，Dopamine 3.x roothide）
 - 分析方式：**纯静态只读**。未修改、未删除任何源码，未执行任何越狱/设备操作。
