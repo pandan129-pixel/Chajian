@@ -1,6 +1,6 @@
 Package: com.nfb.tweak
 Name: NeoFreeBird (X 12.39)
-Version: 7.3.0-4
+Version: 7.3.0-5
 Architecture: iphoneos-arm64
 Section: Tweaks
 Priority: optional
@@ -9,21 +9,21 @@ Author: NeoFreeBird
 Depends: firmware (>= 15.0), mobilesubstrate
 Conflicts: com.bandarhl.bhtwitter, com.den.twigalaxy, xyz.cypwn.twigalaxy, xyz.cypwn.bhtwitter, com.netskao.twitternoads, xyz.cypwn.bringbacktwitter
 Replaces: com.bandarhl.bhtwitter
-Installed-Size: 15188
+Installed-Size: 14660
 Description: NeoFreeBird 7.3.0（X 12.39 构建，已修 12.38+ T1TabView 崩溃，含简体中文汉化）
  从 X 12.39 NFB730 IPA 提取；T1TabView 改用 applyTintColor:，
  不再调用已删除的 _t1_updateTitleLabel / titleLabel KVC。
  简体中文已补 zh-Hans.lproj（iOS 现代语言码），并修正术语/文案。
  与旧 com.bandarhl.bhtwitter 冲突，安装时先移除旧版，避免双注入。
-Filename: ./debs/com.nfb.tweak_7.3.0-4_iphoneos-arm64.deb
-Size: 6087384
-MD5sum: a48a8e69571bdc9df72e380bf89797ea
-SHA1: 7e24d95722cbd147a894bb2b39b610bea56ee1f6
-SHA256: a620d282339cabbf3edd18c934bcb0d05bf9e8165814a269e7c62b3d4b18b47b
+Filename: ./debs/com.nfb.tweak_7.3.0-5_iphoneos-arm64.deb
+Size: 5936748
+MD5sum: 66aa5ceacecfd074be44efb7aecfd7b8
+SHA1: 7c450ebe5321f0dd928b963b13f6ad8432be4f93
+SHA256: 79ef59d1637cb66c1092f62fe94fbcfb3d5644a5b0debe2458c7a13b2d78f2e7
 
 Package: com.nfb.tweak
 Name: NeoFreeBird (X 12.39)
-Version: 7.3.0-4
+Version: 7.3.0-5
 Architecture: iphoneos-arm64e
 Section: Tweaks
 Priority: optional
@@ -33,17 +33,17 @@ Depends: firmware (>= 15.0), mobilesubstrate
 Pre-Depends: rootless-compat (>= 0.9)
 Conflicts: com.bandarhl.bhtwitter, com.den.twigalaxy, xyz.cypwn.twigalaxy, xyz.cypwn.bhtwitter, com.netskao.twitternoads, xyz.cypwn.bringbacktwitter
 Replaces: com.bandarhl.bhtwitter
-Installed-Size: 15188
+Installed-Size: 14660
 Description: NeoFreeBird 7.3.0（X 12.39 构建，已修 12.38+ T1TabView 崩溃，含简体中文汉化）
  从 X 12.39 NFB730 IPA 提取；T1TabView 改用 applyTintColor:，
  不再调用已删除的 _t1_updateTitleLabel / titleLabel KVC。
  简体中文已补 zh-Hans.lproj（iOS 现代语言码），并修正术语/文案。
  与旧 com.bandarhl.bhtwitter 冲突，安装时先移除旧版，避免双注入。
-Filename: ./debs/com.nfb.tweak_7.3.0-4_iphoneos-arm64e.deb
-Size: 6087394
-MD5sum: 850ccd7c5e6da7f801f5ab896078ac23
-SHA1: ac248bc01fdcba7de8961323457c72c7cd07fa36
-SHA256: 746f83155a7f5f5c569c02127a69ce7ca83856f142fc30d6f4f77c9ad08fff19
+Filename: ./debs/com.nfb.tweak_7.3.0-5_iphoneos-arm64e.deb
+Size: 5936794
+MD5sum: 31942c1f3ca38ce5f918f2b0ceb18957
+SHA1: b2b0f9bbfac6982381b89513ca8ead37f66b33c9
+SHA256: a35604523d65894e17ff043e4266ea2744c117b5a83fbfa1ab8caa84a758dd73
 
 Package: com.pandan.amapsplash
 Name: 高德地图 NoAds (Pandan)
