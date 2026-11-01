@@ -1,6 +1,6 @@
 Package: com.nfb.tweak
-Name: NeoFreeBird (X 12.38.1)
-Version: 7.3.0-1
+Name: NeoFreeBird (X 12.39)
+Version: 7.3.0-2
 Architecture: iphoneos-arm64
 Section: Tweaks
 Priority: optional
@@ -9,20 +9,20 @@ Author: NeoFreeBird
 Depends: firmware (>= 15.0), mobilesubstrate
 Conflicts: com.bandarhl.bhtwitter, com.den.twigalaxy, xyz.cypwn.twigalaxy, xyz.cypwn.bhtwitter, com.netskao.twitternoads, xyz.cypwn.bringbacktwitter
 Replaces: com.bandarhl.bhtwitter
-Installed-Size: 13948
-Description: NeoFreeBird 7.3.0，已适配 X 12.38.1
- 修复 X 12.38 删除 T1TabView.titleLabel 导致的启动闪退；
- 含 Liquid Glass / 分栏 / 分享参数等 12.38.1 适配。
- 与旧 com.bandarhl.bhtwitter 冲突，安装时会先移除旧版，避免双注入。
-Filename: ./debs/com.nfb.tweak_7.3.0-1_iphoneos-arm64.deb
-Size: 5699778
-MD5sum: bb9093411f797a94cdc33d484f41558e
-SHA1: 6570135f2d5e0fec761660b4487e136ef9a130d9
-SHA256: 416952f846fb71fef395842587e87a51488b0c8000b3ba068cb87f9e081d5e18
+Installed-Size: 14108
+Description: NeoFreeBird 7.3.0（X 12.39 构建，已修 12.38+ T1TabView 崩溃）
+ 从 X 12.39 NFB730 IPA 提取；T1TabView 改用 applyTintColor:，
+ 不再调用已删除的 _t1_updateTitleLabel / titleLabel KVC。
+ 与旧 com.bandarhl.bhtwitter 冲突，安装时先移除旧版，避免双注入。
+Filename: ./debs/com.nfb.tweak_7.3.0-2_iphoneos-arm64.deb
+Size: 5780232
+MD5sum: 4ee3751f7e88584455f4b28397308026
+SHA1: ca64538a6771cf40a32dde6808a8862bfc2e3df9
+SHA256: 427bfc6f14723497ca9b54d2654b22f4e05953f2e3e490a3f5254dd6da252a23
 
 Package: com.nfb.tweak
-Name: NeoFreeBird (X 12.38.1)
-Version: 7.3.0-1
+Name: NeoFreeBird (X 12.39)
+Version: 7.3.0-2
 Architecture: iphoneos-arm64e
 Section: Tweaks
 Priority: optional
@@ -32,16 +32,16 @@ Depends: firmware (>= 15.0), mobilesubstrate
 Pre-Depends: rootless-compat (>= 0.9)
 Conflicts: com.bandarhl.bhtwitter, com.den.twigalaxy, xyz.cypwn.twigalaxy, xyz.cypwn.bhtwitter, com.netskao.twitternoads, xyz.cypwn.bringbacktwitter
 Replaces: com.bandarhl.bhtwitter
-Installed-Size: 13948
-Description: NeoFreeBird 7.3.0，已适配 X 12.38.1
- 修复 X 12.38 删除 T1TabView.titleLabel 导致的启动闪退；
- 含 Liquid Glass / 分栏 / 分享参数等 12.38.1 适配。
- 与旧 com.bandarhl.bhtwitter 冲突，安装时会先移除旧版，避免双注入。
-Filename: ./debs/com.nfb.tweak_7.3.0-1_iphoneos-arm64e.deb
-Size: 5699750
-MD5sum: 5ff438d75e175f1a28d659df32f1bb6e
-SHA1: 368e0e9c03398293b4c4acc1344ac93b396ce1b9
-SHA256: b24a2a88c6c16765b7e09188b9f92fc7c3d4dbde4bd190e03b6b433fb0470c64
+Installed-Size: 14108
+Description: NeoFreeBird 7.3.0（X 12.39 构建，已修 12.38+ T1TabView 崩溃）
+ 从 X 12.39 NFB730 IPA 提取；T1TabView 改用 applyTintColor:，
+ 不再调用已删除的 _t1_updateTitleLabel / titleLabel KVC。
+ 与旧 com.bandarhl.bhtwitter 冲突，安装时先移除旧版，避免双注入。
+Filename: ./debs/com.nfb.tweak_7.3.0-2_iphoneos-arm64e.deb
+Size: 5780224
+MD5sum: 2ae8d0818528c388a4f8b61e61abcfc2
+SHA1: b3e5e110aaeb188e53ae02cd8e49899afdd700e5
+SHA256: 7033147b7b7cef22e5ddc2252cf4132fbde0b62a361fb94fe269ba0f95c77078
 
 Package: com.pandan.amapsplash
 Name: 高德地图 NoAds (Pandan)
