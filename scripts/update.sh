@@ -16,10 +16,42 @@ if [ -z "${GIT_SSH_COMMAND:-}" ] && [ -f "$HOME/.ssh/id_ed25519_iphone" ]; then
 fi
 
 pull_rebase() {
-    if ! git pull --rebase --autostash --quiet; then
-        echo "[update] pull --rebase 失败，先手动处理冲突" >&2
-        exit 1
+    if git pull --rebase --autostash --quiet; then
+        return 0
     fi
+    if resolve_generated_conflicts; then
+        echo "[update] 已自动解决生成文件的 rebase 冲突"
+        return 0
+    fi
+    echo "[update] pull --rebase 失败，先手动处理冲突" >&2
+    exit 1
+}
+
+# docs/Release、Packages*、index.html、debs 都是 repo.py 的生成物。
+# rebase 时如果和隔壁会话/Actions 的提交撞了，直接取正在应用的那一版，
+# 后面 build 会重新生成，不需要人工合并。
+resolve_generated_conflicts() {
+    n=0
+    while [ -d .git/rebase-merge ] || [ -d .git/rebase-apply ]; do
+        n=$((n + 1))
+        [ "$n" -le 5 ] || return 1
+        files=$(git diff --name-only --diff-filter=U)
+        [ -n "$files" ] || return 1
+        for f in $files; do
+            case "$f" in
+                docs/Release|docs/Packages*|docs/index.html|docs/debs/*|docs/.nojekyll)
+                    git checkout --theirs -- "$f" 2>/dev/null || true
+                    git add -A -- "$f"
+                    ;;
+                *)
+                    echo "[update] 无法自动解决的冲突: $f" >&2
+                    return 1
+                    ;;
+            esac
+        done
+        GIT_EDITOR=true git rebase --continue >/dev/null 2>&1 || true
+    done
+    return 0
 }
 
 build() {
