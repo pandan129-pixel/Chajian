@@ -1,0 +1,17 @@
+Package: com.bandarhl.bhtwitter
+Name: BHTwitter (NFX)
+Version: @VERSION@
+Architecture: @ARCH@
+Description: X (Twitter) 增强插件 - 从 X 12.37 NFX 7.2 (秋名山) IPA 中提取的插件
+ 去广告/下载媒体/多账号/界面自定义. 本包只含插件本体与资源包,
+ 不含 IPA，也不含侧载用的 ellekit 注入框架.
+ .
+ 已按越狱约定改写 ellekit 依赖: roothide 用 @loader_path/.jbroot/usr/lib/libsubstrate.dylib,
+ rootless 用 /var/jb/usr/lib/libsubstrate.dylib.
+Section: Tweaks
+Depends: firmware (>= 14.0), mobilesubstrate
+Pre-Depends: rootless-compat (>= 0.9)
+Priority: optional
+Installed-Size: @INSTALLED_SIZE@
+Author: BandarHL
+Maintainer: 秋名山 (repack: local)

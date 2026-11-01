@@ -12,7 +12,7 @@ DST="$WS/repo/sources"
 echo "[sources] $WS -> $DST"
 mkdir -p "$DST"
 # 只重建由本脚本管理的四个项目，保留 sources/ 下其它手工目录
-for p in jbb xianyu-duo crash-analyzer-pro amap-splash x-twitter-nfb; do
+for p in jbb xianyu-duo crash-analyzer-pro amap-splash x-twitter-nfb x-twitter-nfx; do
     rm -rf "$DST/$p"
 done
 rm -f "$DST/README.md"
@@ -71,6 +71,22 @@ for p in packaging l10n docs src fix; do
         copy_dir "plugins/x-twitter-nfb/$p" "x-twitter-nfb/$p"
 done
 
+# ---- x-twitter-nfx ---------------------------------------------------
+mkdir -p "$DST/x-twitter-nfx/src"
+cp "$WS/plugins/x-twitter-nfx/README.md" \
+   "$WS/plugins/x-twitter-nfx/build-1239.sh" \
+   "$WS/plugins/x-twitter-nfx/build.sh" \
+   "$WS/plugins/x-twitter-nfx/extract.sh" \
+   "$DST/x-twitter-nfx/"
+for p in packaging docs tools; do
+    [ -d "$WS/plugins/x-twitter-nfx/$p" ] && \
+        copy_dir "plugins/x-twitter-nfx/$p" "x-twitter-nfx/$p"
+done
+for f in NFXSettingsRow.m NFXSettingsGesture.m; do
+    [ -f "$WS/plugins/x-twitter-nfx/src/$f" ] && \
+        cp "$WS/plugins/x-twitter-nfx/src/$f" "$DST/x-twitter-nfx/src/"
+done
+
 # ---- clean + sanitize ------------------------------------------------
 find "$DST" -name '.DS_Store' -delete
 find "$DST" -type d -name '.theos' -exec rm -rf {} + 2>/dev/null || true
@@ -106,6 +122,11 @@ for dirpath, _, files in os.walk(root):
             new = re.sub(
                 r'IPA=\$\{1:-/Users/[^}]+\}',
                 'IPA=${1:-$HOME/Downloads/X_Twitter_12.39_NFB730_秋名山.ipa}',
+                new, count=1)
+        if path.endswith('/x-twitter-nfx/extract.sh'):
+            new = re.sub(
+                r'IPA=\$\{1:-"/Users/[^"]+"\}',
+                'IPA=${1:-"$HOME/Downloads/X_Twitter_12.37_NFX7.2_秋名山.ipa"}',
                 new, count=1)
         new = userpath.sub('~', new)
         if new != src:

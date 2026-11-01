@@ -88,11 +88,15 @@ python3 scripts/repo.py --keep-all
 exclude_packages = com.bandarhl.bhtwitter com.pandan.xianyu322
 ```
 
-当前收录：`jbb`、`NeoFreeBird (X 12.39)`、`闲鱼助手+存图`、`AI 日志分析 Pro`、
+当前收录：`jbb`、`BHTwitter / NFX 7.2 (X 12.39)`、`闲鱼助手+存图`、`AI 日志分析 Pro`、
 `高德 NoAds`、`WCLite`、`小红薯(去公告)`、`WATrans`、`威锋NoAds`、
 `NTQQ_AntiRecall 1.6.2`。外部 deb 都放在 `debs-in/`，来源和校验和见
-`debs-in/README.md`；NeoFreeBird 的源码、汉化和重打包脚本已收录在
-`sources/x-twitter-nfb/`（上游 GPL-3.0，`dist/` 和 `vendor/` 不收录）。
+`debs-in/README.md`。
+
+X 插件当前用 `com.bandarhl.bhtwitter 7.2-20`（`Conflicts/Replaces: com.nfb.tweak`）；
+NeoFreeBird 7.3.0-7 已从源里下架（在 `exclude_packages` 里），源码仍存档在
+`sources/x-twitter-nfb/`；BHTwitter 的重打包脚本和 NFXSettingsRow 辅助源码在
+`sources/x-twitter-nfx/`（第三方 dylib/bundle 不入库）。
 
 局域网测试：
 
