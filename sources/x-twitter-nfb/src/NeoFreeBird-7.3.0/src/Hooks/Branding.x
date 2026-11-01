@@ -89,9 +89,13 @@ static NSRegularExpression* RenameRegex(void) {
     }];
     NSString* pattern = [NSString
         stringWithFormat:@"\\b(%@)\\b", [words componentsJoinedByString:@"|"]];
+    // CJK: ICU \b only breaks between word/non-word characters, so two adjacent
+    // Han characters have no boundary and 转帖/帖子 inside a sentence would never
+    // match. Unicode word boundaries make the Chinese RenameWords table work.
     return [NSRegularExpression
         regularExpressionWithPattern:pattern
-                             options:NSRegularExpressionCaseInsensitive
+                             options:(NSRegularExpressionCaseInsensitive |
+                                      NSRegularExpressionUseUnicodeWordBoundaries)
                                error:nil];
 }
 

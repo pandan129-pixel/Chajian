@@ -4,8 +4,8 @@
 按越狱约定重打包成 Pandan 源用的两个 flavor。
 
 ```
-dist/com.nfb.tweak_7.3.0-4_iphoneos-arm64.deb    rootless（/var/jb，.28）
-dist/com.nfb.tweak_7.3.0-4_iphoneos-arm64e.deb   roothide（无前缀，.20）
+dist/com.nfb.tweak_7.3.0-7_iphoneos-arm64.deb    rootless（/var/jb，.28）
+dist/com.nfb.tweak_7.3.0-7_iphoneos-arm64e.deb   roothide（无前缀，.20）
 ```
 
 ## 为什么用 IPA 里的 dylib，而不是官方 7.3.0 deb
@@ -96,6 +96,15 @@ Replaces:  com.bandarhl.bhtwitter
 - 依赖已改成对应 bootstrap 的 substrate 路径，且不含 ellekit
 - filter 只针对 `com.atebits.Tweetie2`
 - 资源包存在
+
+## 中文化
+
+源码级方案见 `docs/LOCALIZATION.md`：
+
+- `layout/.../zh-Hans.lproj` + `zh_CN.lproj`：318/318；
+- `src/Core/BHTBundle.m`：用 `dladdr` 从 dylib 位置解析 bundle，覆盖 rootful/rootless/roothide/侧载；
+- `src/Hooks/Branding.x`：`NSRegularExpressionUseUnicodeWordBoundaries`，中文术语可在句中替换；
+- 打包用 341 条（12.39 构建）在 `l10n/`，成品 7.3.0-7 内置 `0NFBBundleFix.dylib`。
 
 ## 长期方案
 

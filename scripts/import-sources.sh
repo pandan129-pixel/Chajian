@@ -66,7 +66,7 @@ mkdir -p "$DST/x-twitter-nfb"
 cp "$WS/plugins/x-twitter-nfb/README.md" "$WS/plugins/x-twitter-nfb/SOURCE-MAP.md" \
    "$WS/plugins/x-twitter-nfb/build-ipa.sh" "$WS/plugins/x-twitter-nfb/build.sh" \
    "$DST/x-twitter-nfb/"
-for p in packaging l10n docs src; do
+for p in packaging l10n docs src fix; do
     [ -d "$WS/plugins/x-twitter-nfb/$p" ] && \
         copy_dir "plugins/x-twitter-nfb/$p" "x-twitter-nfb/$p"
 done

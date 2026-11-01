@@ -14,7 +14,7 @@ IPA=${1:-$HOME/Downloads/X_Twitter_12.39_NFB730_秋名山.ipa}
 DIST="$ROOT/dist"
 DPKG_DEB="$ROOT/../../.buildtools/dpkg-deb"
 PACKAGE=com.nfb.tweak
-VERSION=7.3.0-6
+VERSION=7.3.0-7
 XVER=12.39
 
 ROOTHIDE_SUBSTRATE='@loader_path/.jbroot/usr/lib/libsubstrate.dylib'

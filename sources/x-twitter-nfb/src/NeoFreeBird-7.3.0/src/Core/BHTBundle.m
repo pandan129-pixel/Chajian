@@ -6,6 +6,45 @@
 //
 
 #import "BHTBundle.h"
+#import <dlfcn.h>
+
+// The resource bundle lives in a different place per bootstrap:
+//   rootful   /Library/Application Support/BHT/BHTwitter.bundle
+//   rootless  /var/jb/Library/Application Support/BHT/BHTwitter.bundle
+//   roothide  <randomized jbroot>/Library/Application Support/BHT/BHTwitter.bundle
+// Resolving from the dylib's own location covers all three (and the sideloaded
+// X.app/Frameworks layout), instead of relying on hardcoded absolute paths.
+static NSString* BHTResolveBundlePath(void) {
+    NSFileManager* fm = [NSFileManager defaultManager];
+    Dl_info info;
+    if (dladdr((void*)BHTResolveBundlePath, &info) && info.dli_fname) {
+        NSString* d = [[NSString stringWithUTF8String:info.dli_fname]
+                       stringByDeletingLastPathComponent];
+        for (int i = 0; i < 6 && d.length > 1; i++) {
+            NSString* p = [[d stringByAppendingPathComponent:@"BHTwitter.bundle"]
+                           stringByStandardizingPath];
+            if ([fm fileExistsAtPath:p]) {
+                return p;
+            }
+            p = [[d stringByAppendingPathComponent:
+                  @"Library/Application Support/BHT/BHTwitter.bundle"]
+                 stringByStandardizingPath];
+            if ([fm fileExistsAtPath:p]) {
+                return p;
+            }
+            d = [d stringByDeletingLastPathComponent];
+        }
+    }
+    for (NSString* p in @[
+             @"/Library/Application Support/BHT/BHTwitter.bundle",
+             @"/var/jb/Library/Application Support/BHT/BHTwitter.bundle"]) {
+        if ([fm fileExistsAtPath:p]) {
+            return p;
+        }
+    }
+    return [[NSBundle mainBundle] URLForResource:@"BHTwitter"
+                                   withExtension:@"bundle"].path;
+}
 
 @interface BHTBundle ()
 @property (nonatomic, strong) NSBundle* mainBundle;
@@ -16,23 +55,8 @@
     static BHTBundle* sharedBundle = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        NSFileManager* fileManager = [NSFileManager defaultManager];
-        NSURL* bundlePath = nil;
-        if ([fileManager
-                fileExistsAtPath:
-                    @"/Library/Application Support/BHT/BHTwitter.bundle"]) {
-            bundlePath = [NSURL
-                fileURLWithPath:@"/Library/Application Support/BHT/BHTwitter.bundle"];
-        } else if ([fileManager fileExistsAtPath:@"/var/jb/Library/Application "
-                                                 @"Support/BHT/BHTwitter.bundle"]) {
-            bundlePath = [NSURL
-                fileURLWithPath:
-                    @"/var/jb/Library/Application Support/BHT/BHTwitter.bundle"];
-        } else {
-            bundlePath = [[NSBundle mainBundle] URLForResource:@"BHTwitter"
-                                                 withExtension:@"bundle"];
-        }
-
+        NSString* path = BHTResolveBundlePath();
+        NSURL* bundlePath = path ? [NSURL fileURLWithPath:path] : nil;
         sharedBundle = [[self alloc] initWithBundlePath:bundlePath];
     });
     return sharedBundle;

@@ -1,6 +1,6 @@
 Package: com.nfb.tweak
 Name: NeoFreeBird (X 12.39)
-Version: 7.3.0-6
+Version: 7.3.0-7
 Architecture: iphoneos-arm64
 Section: Tweaks
 Priority: optional
@@ -16,15 +16,15 @@ Description: NeoFreeBird 7.3.0（X 12.39 构建，已修 12.38+ T1TabView 崩溃
  简体中文已补 zh-Hans.lproj（iOS 现代语言码），并修正术语/文案。
  内置 0NFBBundleFix.dylib：自动定位 BHTwitter.bundle，修 roothide 下显示 key 的问题。
  与旧 com.bandarhl.bhtwitter 冲突，安装时先移除旧版，避免双注入。
-Filename: ./debs/com.nfb.tweak_7.3.0-6_iphoneos-arm64.deb
-Size: 5942442
-MD5sum: 098f2bdfa5cb7a29dea0af73428f930c
-SHA1: 2e909e6cd7bc3e4cea57d5202b5b17c67dc906bf
-SHA256: f1257626c3598c2a1feaf6a846faf36031998815d79e8e00326db6b140cab522
+Filename: ./debs/com.nfb.tweak_7.3.0-7_iphoneos-arm64.deb
+Size: 5942462
+MD5sum: f374335eeaf16c5bf2775f4fe9c7f15f
+SHA1: ae55347d13554406d4a17001f876750492fb996f
+SHA256: 1a50b17638510bdcdda629d3b170d6a7d4193314d5509045e212588488d674be
 
 Package: com.nfb.tweak
 Name: NeoFreeBird (X 12.39)
-Version: 7.3.0-6
+Version: 7.3.0-7
 Architecture: iphoneos-arm64e
 Section: Tweaks
 Priority: optional
@@ -41,11 +41,11 @@ Description: NeoFreeBird 7.3.0（X 12.39 构建，已修 12.38+ T1TabView 崩溃
  简体中文已补 zh-Hans.lproj（iOS 现代语言码），并修正术语/文案。
  内置 0NFBBundleFix.dylib：自动定位 BHTwitter.bundle，修 roothide 下显示 key 的问题。
  与旧 com.bandarhl.bhtwitter 冲突，安装时先移除旧版，避免双注入。
-Filename: ./debs/com.nfb.tweak_7.3.0-6_iphoneos-arm64e.deb
-Size: 5942396
-MD5sum: 94e6d59f31427a80cec6a565805ce939
-SHA1: d4c986459ea2fc6842592b468899fd159280f3f2
-SHA256: 82d10b31d27627ad115148d6a57fcb0ad5ad987b550299361a228ffce6a30481
+Filename: ./debs/com.nfb.tweak_7.3.0-7_iphoneos-arm64e.deb
+Size: 5942402
+MD5sum: e8374bf50e65508505634aabbebedaeb
+SHA1: 8e73b9b9d3c80a2827ad8e4251f69dfd901da79e
+SHA256: 257fbc2809b30baaeac886ad942fbd0058880d4a669a373602afec37d31ae2c0
 
 Package: com.pandan.amapsplash
 Name: 高德地图 NoAds (Pandan)

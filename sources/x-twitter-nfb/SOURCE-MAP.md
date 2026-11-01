@@ -10,7 +10,7 @@
 ```
 plugins/x-twitter-nfb/
 ├── README.md                     # 项目说明 / 打包差异 / 汉化说明
-├── build-ipa.sh                  # 当前使用：从 12.39 IPA 提取 dylib 打 deb（7.3.0-6）
+├── build-ipa.sh                  # 当前使用：从 12.39 IPA 提取 dylib 打 deb（7.3.0-7）
 ├── build.sh                      # 备选：从官方 7.3.0 deb 重打包
 ├── packaging/
 │   ├── control.in                # deb control 模板（com.nfb.tweak）
@@ -22,8 +22,8 @@ plugins/x-twitter-nfb/
 │   │   └── RenameWords.strings   # 帖子→推文 / 转帖→转推 / X→Twitter
 │   └── zh_CN.lproj/              # 同上（旧语言码，兼容用）
 ├── dist/
-│   ├── com.nfb.tweak_7.3.0-6_iphoneos-arm64.deb    # rootless（/var/jb）
-│   └── com.nfb.tweak_7.3.0-6_iphoneos-arm64e.deb   # roothide（无前缀）
+│   ├── com.nfb.tweak_7.3.0-7_iphoneos-arm64.deb    # rootless（/var/jb）
+│   └── com.nfb.tweak_7.3.0-7_iphoneos-arm64e.deb   # roothide（无前缀）
 ├── docs/
 │   ├── RE-X1238-CRASH.md         # X 12.38+ 启动闪退根因（T1TabView/titleLabel）
 │   └── SOLUTION-X-UPDATE-CRASH.md# 防“X 一更新就闪退”的 fail-open/审计方案
@@ -78,7 +78,7 @@ Conflicts: com.den.twigalaxy, xyz.cypwn.twigalaxy, xyz.cypwn.bhtwitter, com.nets
 ```
 Package: com.nfb.tweak
 Name: NeoFreeBird (X 12.39)
-Version: 7.3.0-6
+Version: 7.3.0-7
 Architecture: iphoneos-arm64      # rootless；arm64e 是 roothide
 Depends: firmware (>= 15.0), mobilesubstrate
 Conflicts: com.bandarhl.bhtwitter, com.den.twigalaxy, xyz.cypwn.twigalaxy, xyz.cypwn.bhtwitter, com.netskao.twitternoads, xyz.cypwn.bringbacktwitter
@@ -120,7 +120,7 @@ Pre-Depends: rootless-compat (>= 0.9)   # 仅 roothide flavor
 ```
 
 > 12.39 IPA 里的构建是改过的版本：会先找 **dylib 同目录**的 `BHTwitter.bundle`
-> （`tweakDylibPath` + `realpath`），所以 7.3.0-6 在
+> （`tweakDylibPath` + `realpath`），所以 7.3.0-7 在
 > `Library/MobileSubstrate/DynamicLibraries/BHTwitter.bundle` 也放了一份。
 
 ### 3.2 hook 入口（Logos）
@@ -194,7 +194,7 @@ git submodule update --init --recursive     # deps/flex、deps/ffmpeg-kit-next �
 ./build.sh --rootless                       # 或 --rootfull
 ```
 
-> 本机当前的 7.3.0-6 dylib 不是这份源码编译的，而是从 12.39 IPA 里提取的
+> 本机当前的 7.3.0-7 dylib 不是这份源码编译的，而是从 12.39 IPA 里提取的
 > 定制构建（带 `resolvedBundleURL` / `applyTintColor:` / 12.38 修复）。
 > 那份定制源码没有公开，只有二进制。
 
@@ -203,10 +203,10 @@ git submodule update --init --recursive     # deps/flex、deps/ffmpeg-kit-next �
 ## 5. 已发布的包
 
 ```
-plugins/x-twitter-nfb/dist/com.nfb.tweak_7.3.0-6_iphoneos-arm64.deb
-plugins/x-twitter-nfb/dist/com.nfb.tweak_7.3.0-6_iphoneos-arm64e.deb
-repo/docs/debs/com.nfb.tweak_7.3.0-6_iphoneos-arm64.deb
-repo/docs/debs/com.nfb.tweak_7.3.0-6_iphoneos-arm64e.deb
+plugins/x-twitter-nfb/dist/com.nfb.tweak_7.3.0-7_iphoneos-arm64.deb
+plugins/x-twitter-nfb/dist/com.nfb.tweak_7.3.0-7_iphoneos-arm64e.deb
+repo/docs/debs/com.nfb.tweak_7.3.0-7_iphoneos-arm64.deb
+repo/docs/debs/com.nfb.tweak_7.3.0-7_iphoneos-arm64e.deb
 ```
 
 deb 内部布局：
