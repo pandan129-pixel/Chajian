@@ -159,21 +159,26 @@ base_url = https://<用户名>.github.io/<仓库名>
 添加后下拉刷新，插件会出现在「分类 / 全部」里。装完如果没生效，
 先 respring；PreferenceLoader 的设置项要等一次 respring 才出现。
 
-## 6. 日常发版流程
+## 6. 日常更新
+
+以后统一用这一条，不用再指定是哪个插件：
 
 ```sh
-cd /Users/dan/Desktop/iphone
-sh jbb/scripts/pack-deb.sh iphoneos-arm64e      # 或你的插件构建脚本
-
-cd repo
-python3 scripts/repo.py                          # 重新生成索引
-git add docs
-git commit -m "jbb 6.22.8"
-git push
+cd /Users/dan/Desktop/iphone/repo
+sh scripts/update.sh
 ```
 
-推送后 Pages 会自动重新发布。设备端 Sileo 下拉刷新就能看到新版本；
-如果还是旧的，检查：
+脚本会自动：
+
+- `git pull --rebase` 拉远端
+- 扫描 `../plugins/*/dist`、`../jbb/dist`、`../jb-bypass/dist`、`debs-in/`
+- 按 dpkg 版本规则，每个包 × 每个架构取最新版
+- 同步 `sources/`（jbb / 闲鱼 / AI 日志 / 高德）
+- 重建 `Packages` / `Release` / `index.html`
+- `commit` + `push`；推送被拒会自动 rebase 重试
+
+想保留历史版本加 `--keep-all`。推送后 Pages 会自动重新发布。
+设备端 Sileo 下拉刷新就能看到新版本；如果还是旧的，检查：
 
 - `Version:` 是否真的比已装版本大（dpkg 版本比较很严格）
 - Pages 是否部署完成（仓库 Actions/Pages 页看最后一次部署）

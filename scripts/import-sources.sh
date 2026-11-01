@@ -10,8 +10,12 @@ WS=$(cd "$(dirname "$0")/../.." && pwd)
 DST="$WS/repo/sources"
 
 echo "[sources] $WS -> $DST"
-rm -rf "$DST"
 mkdir -p "$DST"
+# 只重建由本脚本管理的四个项目，保留 sources/ 下其它手工目录
+for p in jbb xianyu-duo crash-analyzer-pro amap-splash; do
+    rm -rf "$DST/$p"
+done
+rm -f "$DST/README.md"
 
 copy_dir() {
     mkdir -p "$DST/$2"
