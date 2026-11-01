@@ -6,20 +6,20 @@ Codename: ios
 Architectures: iphoneos-arm64 iphoneos-arm64e
 Components: main
 Description: Pandan 自用 iOS 插件源（roothide / rootless）
-Date: Sun, 01 Nov 2026 20:09:20 +0000
+Date: Sun, 01 Nov 2026 20:33:30 +0000
 Icon: file://CydiaIcon.png
 MD5Sum:
- 49919bc6c0dea2f06bc6e5cd3516fc28 12055 Packages
- e88fa294679334c3806c66b30dbe99d2 4335 Packages.gz
- 0d161fa40ddce4544e0d416167686fe6 4507 Packages.bz2
- 0e571a9f24bdbb5ba1bfddaa4cb564e9 3988 Packages.xz
+ 3ead5fa7cd556e94037addc78c50416f 12041 Packages
+ 4791ec5aa6ad7d69332c19ef037b109b 4323 Packages.gz
+ cbeb35d8191e9c6b7c35be753e3b8f3f 4475 Packages.bz2
+ 0cf4e0ee224453473673e1a2f3620287 3980 Packages.xz
 SHA1:
- fbedeafa67424bf22336956782531eca815b3df7 12055 Packages
- 3f1075e8c31e0542507788783a128d263bacd8b6 4335 Packages.gz
- 1dd43ff8eb6a8c5810119a3471e0053ce8710139 4507 Packages.bz2
- a85fdd6bfa13362f4fa193a61d2a8908fc40f67e 3988 Packages.xz
+ 0fa066b2583c61286e7b87ac497a19fd20929032 12041 Packages
+ b8ccd6872288bab22836f2e2cf4adec537902b45 4323 Packages.gz
+ dbe48cfc1acfd414fcbe8ba9fbe4ab1a8484ff32 4475 Packages.bz2
+ 1d9087aaf7d065974e606c9f4ac9932bfd04f330 3980 Packages.xz
 SHA256:
- b4f26c7624ae137e577d1fa0efb41aadfff00be6ee10dfef929cde4deb2361ed 12055 Packages
- 9e89c2ab5df65c6949929677d7cb1732e91b2cc0e55ea1660985549971a95239 4335 Packages.gz
- 5ba1fe999f24678330d7dff21f383541029acc125c1c73ab4f2dacf179673d9d 4507 Packages.bz2
- f1bf36941751ac10eda8fa7a80483cf0b99dc0f957800907f4e95d2ccbd75c0a 3988 Packages.xz
+ a8089a675f50ce4038d851a48444b9647e29d58294f2cdeb75eebfdcc33ffefd 12041 Packages
+ c6d63a58b54f2eb005767956de4bd107cda8657cf1d88e1c9028d35e58d85191 4323 Packages.gz
+ fff92f9b70f8c581837e180dca934437d8081e3bdc84edcef9c8257ae2181016 4475 Packages.bz2
+ 3817de915a4052501074c0844bf447f32aa5f045cc3ea13e00cf34235be39330 3980 Packages.xz
