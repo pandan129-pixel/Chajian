@@ -14,7 +14,7 @@ IPA=${1:-$HOME/Downloads/X_Twitter_12.39_NFB730_秋名山.ipa}
 DIST="$ROOT/dist"
 DPKG_DEB="$ROOT/../../.buildtools/dpkg-deb"
 PACKAGE=com.nfb.tweak
-VERSION=7.3.0-5
+VERSION=7.3.0-6
 XVER=12.39
 
 ROOTHIDE_SUBSTRATE='@loader_path/.jbroot/usr/lib/libsubstrate.dylib'
@@ -78,6 +78,8 @@ stage() {
 
     cp "$payload/BHTwitter.dylib" "$dest/Library/MobileSubstrate/DynamicLibraries/BHTwitter.dylib"
     cp "$payload/libbhFLEX.dylib" "$dest/Library/MobileSubstrate/DynamicLibraries/libbhFLEX.dylib"
+    # 资源包查找修复：名字以 0 开头，尽量先于 BHTwitter.dylib 加载
+    cp "$ROOT/fix/NFBBundleFix.dylib" "$dest/Library/MobileSubstrate/DynamicLibraries/0NFBBundleFix.dylib"
     # filters: only X
     cat > "$dest/Library/MobileSubstrate/DynamicLibraries/BHTwitter.plist" <<'PLIST'
 <?xml version="1.0" encoding="UTF-8"?>
@@ -87,6 +89,8 @@ stage() {
 PLIST
     cp "$dest/Library/MobileSubstrate/DynamicLibraries/BHTwitter.plist" \
        "$dest/Library/MobileSubstrate/DynamicLibraries/libbhFLEX.plist"
+    cp "$dest/Library/MobileSubstrate/DynamicLibraries/BHTwitter.plist" \
+       "$dest/Library/MobileSubstrate/DynamicLibraries/0NFBBundleFix.plist"
     cp -R "$APP/BHTwitter.bundle" "$dest/Library/Application Support/BHT/BHTwitter.bundle"
     # NeoFreeBird 7.3.0 (12.39 build) looks for BHTwitter.bundle next to the
     # loaded dylib first (tweakDylibPath uses dladdr + realpath, so this is the
@@ -114,6 +118,7 @@ PLIST
         echo " 从 X $XVER NFB730 IPA 提取；T1TabView 改用 applyTintColor:，"
         echo " 不再调用已删除的 _t1_updateTitleLabel / titleLabel KVC。"
         echo " 简体中文已补 zh-Hans.lproj（iOS 现代语言码），并修正术语/文案。"
+        echo " 内置 0NFBBundleFix.dylib：自动定位 BHTwitter.bundle，修 roothide 下显示 key 的问题。"
 echo " 与旧 com.bandarhl.bhtwitter 冲突，安装时先移除旧版，避免双注入。"
     } > "$stage/DEBIAN/control"
     chmod 0644 "$stage/DEBIAN/control"
@@ -143,6 +148,10 @@ verify() {
     strings -a "$dylib" | grep -q 'NeoFreeBird'
     bundle="$ex/${prefix:+$prefix/}Library/Application Support/BHT/BHTwitter.bundle"
     [ -f "$bundle/Info.plist" ] || { echo "no bundle in $deb" >&2; return 1; }
+    fixdylib="$ex/${prefix:+$prefix/}Library/MobileSubstrate/DynamicLibraries/0NFBBundleFix.dylib"
+    [ -f "$fixdylib" ] || { echo "no bundle fix dylib in $deb" >&2; return 1; }
+    lipo -info "$fixdylib" | grep -q arm64
+    codesign --verify "$fixdylib" >/dev/null 2>&1
     for l in zh-Hans zh_CN; do
         [ -f "$bundle/$l.lproj/Localizable.strings" ] || {
             echo "no $l.lproj in $deb" >&2; return 1; }

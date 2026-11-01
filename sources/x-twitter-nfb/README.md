@@ -38,6 +38,21 @@ dist/com.nfb.tweak_7.3.0-4_iphoneos-arm64e.deb   roothide（无前缀，.20）
 python3 l10n/build_zh.py /path/to/BHTwitter.bundle
 ```
 
+## 本地化资源包修复（0NFBBundleFix.dylib）
+
+NFB 7.3.0 的 `BHTBundle` 只认几个写死路径，roothide 上经常找不到
+`BHTwitter.bundle`，界面就会显示 `NFB_SETTINGS_TITLE` 这类 key。
+
+`fix/NFBBundleFix.m` 编译出的 `0NFBBundleFix.dylib` 会在启动时：
+
+1. 从自己的 dylib 目录逐级向上找 `BHTwitter.bundle`；
+2. 精确重定向 `+[NSBundle bundleWithPath:]` 和
+   `-[NSFileManager fileExistsAtPath:]`（只对 `BHTwitter.bundle` 路径生效）。
+
+它不改 NFB 二进制，也不依赖 `/Library`、`/var/jb` 是否存在；找不到时只打日志，
+不会影响 App 启动。本地用 macOS 版验证过：对一个不存在的路径调用
+`bundleWithPath:` 也能拿到真实 bundle 并读出中文。
+
 ## 打包差异
 
 侧载 dylib 依赖：
