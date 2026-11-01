@@ -6,7 +6,7 @@ Codename: ios
 Architectures: iphoneos-arm64 iphoneos-arm64e
 Components: main
 Description: Pandan 自用 iOS 插件源（roothide / rootless）
-Date: Sun, 01 Nov 2026 20:05:37 +0000
+Date: Sun, 01 Nov 2026 20:05:51 +0000
 Icon: file://CydiaIcon.png
 MD5Sum:
  e73d4daec4c2d91df35720f6a187389d 12011 Packages
