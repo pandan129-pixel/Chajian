@@ -211,6 +211,7 @@ static void XYDInstallUserInfoHook(NSString *name) {
 }
 
 void XYDInstallEntry(void) {
+    if (XYDPrefBool(@"safeMode", NO)) return;
     if (!gMyPageMoveOrig) {
         gMyPageMoveOrig = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsOpaqueMemory | NSPointerFunctionsOpaquePersonality
                                                valueOptions:NSPointerFunctionsStrongMemory];

@@ -14,6 +14,7 @@ static NSArray *JBBKeys(void) {
         @[@"ppid", @"getppid"],
         @[@"env", @"getenv (DYLD_*)"],
         @[@"csops", @"csops 标志位"],
+        @[@"taskinfo", @"task_info 反窥探（高风险，默认关）"],
         @[@"extraTokens", @"额外 token"],
     ];
 }
@@ -46,7 +47,7 @@ static NSArray *JBBKeys(void) {
                                                                get:@selector(getValue:)
                                                             detail:nil cell:PSSwitchCell edit:nil];
             [s setProperty:key forKey:@"jbbKey"];
-            BOOL def = [@[@"env", @"extraTokens"] containsObject:key] ? NO : YES;
+            BOOL def = [@[@"env", @"extraTokens", @"taskinfo"] containsObject:key] ? NO : YES;
             [s setProperty:@(def) forKey:@"default"];
             [specs addObject:s];
         }

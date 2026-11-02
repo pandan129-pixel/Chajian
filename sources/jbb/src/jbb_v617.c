@@ -171,6 +171,11 @@ static void h_abort(void) { if (gDiag) jb_trace_exit("abort", 0); o_abort(); }
 
 // ---------------- v6.2: per-app profile ----------------
 static int gFile = 1, gDyld = 1, gName = 1, gSysctl = 1, gPtrace = 1, gEnv = 0, gPpid = 1, gObjC = 1, gCsops = 1;
+/* v6.23: task_info(TASK_DYLD_INFO) faking is opt-in. It returns a pointer into
+ * our own data segment to callers that expect dyld's structure; a caller that
+ * trusts the fake count/array can misbehave, and concurrent calls share one
+ * buffer. Off unless the profile asks for it. */
+static int gTaskInfo = 0;
 static int gEnabled = 1;
 
 static void jb_tokens_init(BOOL extra, NSArray *custom);
@@ -265,6 +270,19 @@ static void jb_load_profile(void)
             return;
         }
 
+        /* Known-incompatible combinations (user-reported bugs):
+         *   QQ      + ObjC swizzling  -> breakage
+         *   WeChat  + file API hooks  -> breakage
+         * Keep them off unless the profile explicitly turns them on.
+         * Applied even when there is no profile at all. */
+        {
+            BOOL hasProfile = [profile isKindOfClass:[NSDictionary class]];
+            if ([bid isEqualToString:@"com.tencent.mqq"] &&
+                (!hasProfile || !profile[@"objc"])) gObjC = 0;
+            if ([bid isEqualToString:@"com.tencent.xin"] &&
+                (!hasProfile || !profile[@"file"])) gFile = 0;
+        }
+
         if (![profile isKindOfClass:[NSDictionary class]]) {
             jb_tokens_init(gExtraDefault, nil);
             return;
@@ -279,6 +297,7 @@ static void jb_load_profile(void)
         gPpid = jb_pbool(profile, @"ppid", YES);
         gObjC = jb_pbool(profile, @"objc", YES);
         gCsops = jb_pbool(profile, @"csops", YES);
+        gTaskInfo = jb_pbool(profile, @"taskinfo", NO);
         gDiag = jb_pbool(profile, @"diag", NO);
         if (profile[@"enabled"]) gEnabled = [profile[@"enabled"] boolValue];
 
@@ -819,26 +838,47 @@ static pthread_mutex_t gInfosLock = PTHREAD_MUTEX_INITIALIZER;
 static kern_return_t h_task_info(task_name_t task, task_flavor_t flavor,
                                  task_info_t info, mach_msg_type_number_t *cnt) {
     kern_return_t kr = o_task_info(task, flavor, info, cnt);
-    if (jb_compat_mode()) return kr;
+    if (!gTaskInfo || jb_compat_mode()) return kr;
     if (kr != KERN_SUCCESS || flavor != TASK_DYLD_INFO || !info || !cnt ||
         *cnt < TASK_DYLD_INFO_COUNT || task != mach_task_self())
         return kr;
 
     struct task_dyld_info *di = (struct task_dyld_info *)info;
-    const struct dyld_all_image_infos *real =
-        (const struct dyld_all_image_infos *)(uintptr_t)di->all_image_info_addr;
-    if (!real || !real->infoArray || real->infoArrayCount == 0) return kr;
+    vm_address_t realAddr = (vm_address_t)di->all_image_info_addr;
+    if (!realAddr) return kr;
+
+    /* Never dereference the returned address directly: copy it with
+     * vm_read_overwrite so a bogus/partial mapping cannot fault. */
+    struct dyld_all_image_infos local;
+    vm_size_t got = 0;
+    if (vm_read_overwrite(mach_task_self(), realAddr, sizeof(local),
+                          (vm_address_t)&local, &got) != KERN_SUCCESS ||
+        got < offsetof(struct dyld_all_image_infos, infoArray) + sizeof(local.infoArray))
+        return kr;
+    if (!local.infoArray || local.infoArrayCount == 0) return kr;
+
+    uint32_t count = local.infoArrayCount;
+    if (count > JB_MAX_IMAGES) count = JB_MAX_IMAGES;
 
     pthread_mutex_lock(&gInfosLock);
-    /* Copy the whole struct so every version-specific field (dyldPath,
-     * notification, uuidArray...) keeps pointing at the real dyld data; we only
-     * override the image array and its count. */
-    memcpy(&gFakeInfos, real, sizeof(gFakeInfos));
+    gFakeInfos = local;
     uint32_t w = 0;
-    for (uint32_t i = 0; i < real->infoArrayCount && w < JB_MAX_IMAGES; i++) {
-        const char *path = real->infoArray[i].imageFilePath;
-        if (path && jb_token(path)) continue;
-        gFakeImgArray[w++] = real->infoArray[i];
+    for (uint32_t i = 0; i < count; i++) {
+        struct dyld_image_info e;
+        vm_size_t n = 0;
+        if (vm_read_overwrite(mach_task_self(),
+                              (vm_address_t)(local.infoArray + i),
+                              sizeof(e), (vm_address_t)&e, &n) != KERN_SUCCESS) continue;
+        if (e.imageFilePath) {
+            char name[512];
+            vm_size_t nb = 0;
+            if (vm_read_overwrite(mach_task_self(), (vm_address_t)e.imageFilePath,
+                                  sizeof(name) - 1, (vm_address_t)name, &nb) == KERN_SUCCESS) {
+                name[sizeof(name) - 1] = 0;
+                if (jb_token(name)) continue;
+            }
+        }
+        gFakeImgArray[w++] = e;
     }
     gFakeInfos.infoArray = gFakeImgArray;
     gFakeInfos.infoArrayCount = w;
@@ -1059,7 +1099,8 @@ static void jbb_init(void) {
         if (o_slide)  { MSHook((void *)o_slide,  (void *)h_slide_safe,  &o); o_slide  = (intptr_t (*)(uint32_t))o; }
 
         // 同属"隐藏镜像列表"：堵住直读 all_image_infos 的 task_info 路径
-        jb_hook("task_info", (void *)h_task_info, (void **)&o_task_info);
+        // v6.23: opt-in only - see gTaskInfo in jb_load_profile.
+        if (gTaskInfo) jb_hook("task_info", (void *)h_task_info, (void **)&o_task_info);
     }
 
 

@@ -45,7 +45,7 @@ void XYDScanAndHideAds(UIView *root) {
     if (!root || !XYDPrefBool(@"enabled", YES) || !XYDPrefBool(@"cleanMyPage", YES)) return;
     NSMutableArray<UIView *> *stack = [NSMutableArray arrayWithObject:root];
     NSMutableArray<UIView *> *marked = [NSMutableArray array];
-    NSInteger budget = 700;
+    NSInteger budget = 400;
     while (stack.count && budget-- > 0) {
         UIView *v = stack.lastObject;
         [stack removeLastObject];
@@ -251,7 +251,7 @@ static void xyd_userInfoLayout(id self, SEL _cmd) {
     if (![NSStringFromClass([self class]) containsString:@"IFMatrix"]) return;
     static NSTimeInterval lastScan = 0;
     NSTimeInterval now = [NSDate timeIntervalSinceReferenceDate];
-    if (now - lastScan < 1.5) return;
+    if (now - lastScan < 3.0) return;
     lastScan = now;
     UIView *root = self;
     @try {
@@ -269,6 +269,7 @@ void XYDApplyAdPrefs(void) {
 }
 
 void XYDInstallSplashHooks(void) {
+    if (XYDPrefBool(@"safeMode", NO)) return;
     if (!XYDPrefBool(@"blockSplash", YES)) return;
     // 开屏/热启动生命周期一概不拦：只视觉隐藏广告窗口，
     // 让 App 自己的 load -> show -> finish 状态机完整跑完（状态栏也依赖它）。

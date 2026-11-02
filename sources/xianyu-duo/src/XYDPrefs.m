@@ -2,25 +2,82 @@
 #import <stdarg.h>
 #import <os/lock.h>
 #import <string.h>
+#import <sys/time.h>
+#import <time.h>
 
 static NSString *const kXYDDomain = @"com.pandan.xianyuduo";
 
 void XYDLog(NSString *fmt, ...) {
-    va_list ap; va_start(ap, fmt);
-    NSString *msg = [[NSString alloc] initWithFormat:fmt arguments:ap];
-    va_end(ap);
-    NSDateFormatter *df = [NSDateFormatter new];
-    df.dateFormat = @"HH:mm:ss.SSS";
-    NSString *line = [NSString stringWithFormat:@"[%@] %@\n", [df stringFromDate:[NSDate date]], msg];
-    NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:@"xianyuduo.log"];
-    NSFileHandle *fh = [NSFileHandle fileHandleForWritingAtPath:path];
-    if (!fh) {
-        [[NSFileManager defaultManager] createFileAtPath:path contents:nil attributes:nil];
-        fh = [NSFileHandle fileHandleForWritingAtPath:path];
-    }
-    if (fh) {
-        @try { [fh seekToEndOfFile]; [fh writeData:[line dataUsingEncoding:NSUTF8StringEncoding]]; [fh closeFile]; }
-        @catch (__unused NSException *e) {}
+    if (!XYDPrefBool(@"debug", NO)) return;
+    @autoreleasepool {
+        va_list ap; va_start(ap, fmt);
+        NSString *msg = [[NSString alloc] initWithFormat:fmt arguments:ap];
+        va_end(ap);
+        if (!msg.length) return;
+
+        struct timeval tv;
+        gettimeofday(&tv, NULL);
+        struct tm tm;
+        localtime_r(&tv.tv_sec, &tm);
+        char prefix[32];
+        int plen = snprintf(prefix, sizeof(prefix), "[%02d:%02d:%02d.%03d] ",
+                            tm.tm_hour, tm.tm_min, tm.tm_sec, (int)(tv.tv_usec / 1000));
+        if (plen < 0) plen = 0;
+        if (plen > (int)sizeof(prefix) - 1) plen = (int)sizeof(prefix) - 1;
+        const char *body = msg.UTF8String;
+        if (!body) return;
+
+        static os_unfair_lock lock = OS_UNFAIR_LOCK_INIT;
+        static char buf[16384];
+        static size_t bufLen;
+        static FILE *fp;
+        static NSTimeInterval lastFlush;
+        static NSTimeInterval winStart;
+        static NSUInteger winCount;
+        static unsigned long long written;
+        NSTimeInterval now = tv.tv_sec + tv.tv_usec / 1000000.0;
+
+        os_unfair_lock_lock(&lock);
+        if (now - winStart >= 1.0) { winStart = now; winCount = 0; }
+        if (winCount >= 200) { os_unfair_lock_unlock(&lock); return; }  // 限速：200 行/秒
+        winCount++;
+
+        size_t blen = strlen(body);
+        size_t need = (size_t)plen + blen + 1;
+        if (bufLen + need > sizeof(buf)) {
+            // flush before overflow
+            if (fp) { fwrite(buf, 1, bufLen, fp); fflush(fp); written += bufLen; }
+            bufLen = 0;
+            if (need > sizeof(buf)) { os_unfair_lock_unlock(&lock); return; }
+        }
+        memcpy(buf + bufLen, prefix, (size_t)plen); bufLen += (size_t)plen;
+        memcpy(buf + bufLen, body, blen); bufLen += blen;
+        buf[bufLen++] = '\n';
+
+        if (!fp) {
+            NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:@"xianyuduo.log"];
+            fp = fopen(path.UTF8String, "a");
+        }
+        // 最多每 0.5 秒落盘一次，避免每行 open/write/close 造成大量唤醒和磁盘写
+        if (fp && (bufLen >= 8192 || now - lastFlush >= 0.5)) {
+            fwrite(buf, 1, bufLen, fp);
+            fflush(fp);
+            written += bufLen;
+            bufLen = 0;
+            lastFlush = now;
+            if (written > (4ULL * 1024 * 1024)) {   // 4MB 上限，循环覆盖
+                fclose(fp);
+                NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:@"xianyuduo.log"];
+                fp = fopen(path.UTF8String, "w");
+                written = 0;
+                if (fp) {
+                    const char *mark = "[log rotated]\n";
+                    fwrite(mark, 1, strlen(mark), fp);
+                    fflush(fp);
+                }
+            }
+        }
+        os_unfair_lock_unlock(&lock);
     }
 }
 

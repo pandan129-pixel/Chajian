@@ -66,6 +66,8 @@ NSString *XYDCanonicalVideoKey(NSURL *url) {
 - (void)endPage {
     self.onDetailPage = NO;
     self.pageOpenTime = 0;
+    // 离开详情页后不再需要本次捕获的原图/视频，立即释放，避免常驻几十 MB
+    [self removeAll];
 }
 
 - (void)resetForItem:(NSString *)itemId {
@@ -100,8 +102,8 @@ NSString *XYDCanonicalVideoKey(NSURL *url) {
         [self.keys addObject:item.key];
         [self.items addObject:item];
         self.totalBytes += item.byteSize;
-        // 上限：120 条 / 180MB，超出按时间淘汰最旧
-        while (self.items.count > 120 || self.totalBytes > 180LL * 1024 * 1024) {
+        // 上限：60 条 / 64MB，超出按时间淘汰最旧（Jetsam 报告里闲鱼已经 1.5GB+）
+        while (self.items.count > 60 || self.totalBytes > 64LL * 1024 * 1024) {
             XYDMediaItem *old = self.items.firstObject;
             if (!old) break;
             self.totalBytes -= old.byteSize;
@@ -145,6 +147,18 @@ NSString *XYDCanonicalVideoKey(NSURL *url) {
     double minPixel = XYDPrefDouble(@"minPixel", 300);
     if (it.pixelSize.width > 0 && it.pixelSize.height > 0 &&
         MAX(it.pixelSize.width, it.pixelSize.height) < minPixel) return;
+
+    // 同一张图可能被 App 以不同压缩质量/不同 NSData 解码多次，按像素尺寸去重，避免重复占内存
+    if (it.pixelSize.width > 0 && it.pixelSize.height > 0) {
+        @synchronized (self) {
+            for (XYDMediaItem *e in self.items) {
+                if (e.kind != XYDMediaKindPhoto || !e.data.length) continue;
+                if (e.pixelSize.width <= 0 || e.pixelSize.height <= 0) continue;
+                if (fabs(e.pixelSize.width - it.pixelSize.width) <= 2 &&
+                    fabs(e.pixelSize.height - it.pixelSize.height) <= 2) return;
+            }
+        }
+    }
 
     [self addItem:it];
 }
@@ -264,7 +278,7 @@ static id (*orig_urlAsset)(id, SEL, NSURL *, id);
 static void (*orig_loadVideoUrl)(id, SEL, id);
 static void (*orig_setUrl)(id, SEL, id);
 static void (*orig_setPlayUrl)(id, SEL, id);
-static void (*orig_loadVideoId)(id, SEL, id, id, long long);
+static void (*orig_loadVideoId)(id, SEL, id, id, id);
 
 static void xyd_loadVideoUrl(id self, SEL _cmd, id url) {
     if (orig_loadVideoUrl) orig_loadVideoUrl(self, _cmd, url);
@@ -284,8 +298,8 @@ static void xyd_setPlayUrl(id self, SEL _cmd, id url) {
     if (s.length) { XYD_LOG(@"player playUrl %@", s); XYDNoteVideoURL([NSURL URLWithString:s]); }
 }
 
-static void xyd_loadVideoId(id self, SEL _cmd, id vid, id from, long long priority) {
-    XYD_LOG(@"player loadVideoId %@ from=%@", vid, from);
+static void xyd_loadVideoId(id self, SEL _cmd, id vid, id from, id priority) {
+    XYD_LOG(@"player loadVideoId %@ from=%@ priority=%@", vid, from, priority);
     if (orig_loadVideoId) orig_loadVideoId(self, _cmd, vid, from, priority);
 }
 static id xyd_urlAsset(id self, SEL _cmd, NSURL *url, id options) {
@@ -459,6 +473,7 @@ static id xyd_dataTaskReq(id self, SEL _cmd, NSURLRequest *req, void (^completio
         return orig_dataTaskReq ? orig_dataTaskReq(self, _cmd, req, completion) : nil;
     }
     void (^wrapped)(NSData *, NSURLResponse *, NSError *) = ^(NSData *data, NSURLResponse *resp, NSError *err) {
+        @autoreleasepool {
         if (resp) {
             NSString *mime = resp.MIMEType ?: @"";
             if ([mime hasPrefix:@"video/"] || [mime isEqualToString:@"application/octet-stream"]) {
@@ -477,6 +492,7 @@ static id xyd_dataTaskReq(id self, SEL _cmd, NSURLRequest *req, void (^completio
             }
         }
         if (completion) completion(data, resp, err);
+        }
     };
     return orig_dataTaskReq ? orig_dataTaskReq(self, _cmd, req, wrapped) : nil;
 }
@@ -488,6 +504,7 @@ static id xyd_dataTaskURL(id self, SEL _cmd, NSURL *url, void (^completion)(NSDa
         return orig_dataTaskURL ? orig_dataTaskURL(self, _cmd, url, completion) : nil;
     }
     void (^wrapped)(NSData *, NSURLResponse *, NSError *) = ^(NSData *data, NSURLResponse *resp, NSError *err) {
+        @autoreleasepool {
         if (resp) {
             NSString *mime = resp.MIMEType ?: @"";
             if ([mime hasPrefix:@"video/"] || [mime isEqualToString:@"application/octet-stream"]) {
@@ -506,6 +523,7 @@ static id xyd_dataTaskURL(id self, SEL _cmd, NSURL *url, void (^completion)(NSDa
             }
         }
         if (completion) completion(data, resp, err);
+        }
     };
     return orig_dataTaskURL ? orig_dataTaskURL(self, _cmd, url, wrapped) : nil;
 }
@@ -572,16 +590,6 @@ static void (*orig_detailDisappear)(id, SEL, BOOL);
 static void (*orig_detailDidDisappear)(id, SEL, BOOL);
 static void (*orig_flutterAppear)(id, SEL, BOOL);
 
-static id XYDReadObjectIvar(id obj, const char *name) {
-    if (!obj) return nil;
-    Ivar iv = class_getInstanceVariable([obj class], name);
-    if (!iv) return nil;
-    ptrdiff_t off = ivar_getOffset(iv);
-    size_t size = class_getInstanceSize([obj class]);
-    if (off <= 0 || (size_t)off >= size) return nil;
-    return object_getIvar(obj, iv);
-}
-
 static NSString *XYDStringFromValue(id v) {
     if ([v isKindOfClass:[NSString class]]) return v;
     if ([v isKindOfClass:[NSURL class]]) return [(NSURL *)v absoluteString];
@@ -620,29 +628,6 @@ static NSString *iidFromDigits(NSString *s) {
     if (re) {
         NSTextCheckingResult *m = [re firstMatchInString:s options:0 range:NSMakeRange(0, s.length)];
         if (m) return [s substringWithRange:[m rangeAtIndex:1]];
-    }
-    return nil;
-}
-
-static NSString *XYDItemIdFromDetailVC(id vc) {
-    if (!vc) return nil;
-    id ctx = XYDReadObjectIvar(vc, "detailContext");
-    if (ctx) {
-        // 只走 KVC：Swift 计算属性/结构体 ivar 直接读会拿到非对象指针
-        for (NSString *key in @[@"routerURL", @"routerQuery", @"routerCombinedParams"]) {
-            @try {
-                id v = [ctx valueForKey:key];
-                NSString *iid = XYDItemIdFromQueryObject(v);
-                if (iid.length) return iid;
-            } @catch (__unused NSException *e) {}
-        }
-    }
-    for (NSString *key in @[@"routerURL", @"routerQuery"]) {
-        @try {
-            id v = [vc valueForKey:key];
-            NSString *iid = XYDItemIdFromQueryObject(v);
-            if (iid.length) return iid;
-        } @catch (__unused NSException *e) {}
     }
     return nil;
 }
@@ -846,7 +831,7 @@ void XYDScanVideoCache(void) {
         [dirs addObject:[caches stringByAppendingPathComponent:@"com.taobao.fleamarket"]];
         NSDate *cutoff = [NSDate dateWithTimeIntervalSinceNow:-1800];
         NSMutableArray<NSDictionary *> *found = [NSMutableArray array];
-        NSInteger budget = 2000;
+        NSInteger budget = 1200;
         for (NSString *dir in dirs) {
             BOOL isDir = NO;
             if (![fm fileExistsAtPath:dir isDirectory:&isDir] || !isDir) continue;

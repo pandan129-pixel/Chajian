@@ -323,7 +323,7 @@ void XYDShowToast(NSString *text) {
         _items = [NSMutableArray array];
         _selected = [NSMutableSet set];
         _thumbs = [NSCache new];
-        _thumbs.countLimit = 120;
+        _thumbs.countLimit = 40;
         _downloading = [NSMutableDictionary dictionary];
         _thumbQueue = [NSMutableArray array];
         _thumbTries = [NSMutableDictionary dictionary];
@@ -489,6 +489,7 @@ void XYDShowToast(NSString *text) {
         @[@"收集视频地址", @"captureVideo", @1],
         @[@"详情页悬浮球", @"showBall", @1],
         @[@"我的页入口", @"myPageEntry", @1],
+        @[@"兼容模式（少 Hook）", @"safeMode", @0],
         @[@"调试日志", @"debug", @0],
     ];
     for (NSArray *d in defs) {

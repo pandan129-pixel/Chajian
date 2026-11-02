@@ -50,6 +50,13 @@ static NSDictionary *Containers(BOOL refresh) {
     return cached;
 }
 
+/* Known-incompatible combinations - keep these off by default. */
+static NSDictionary *DefaultOverrides(NSString *bid) {
+    if ([bid isEqualToString:@"com.tencent.mqq"]) return @{@"objc": @NO};
+    if ([bid isEqualToString:@"com.tencent.xin"]) return @{@"file": @NO};
+    return nil;
+}
+
 static NSSet *InjectedApps(void) {
     NSDictionary *f = ReadDict([JBRoot() stringByAppendingPathComponent:@"usr/lib/TweakInject/jbb.plist"]);
     NSArray *bundles = f[@"Filter"][@"Bundles"];
@@ -84,8 +91,10 @@ static void Publish(BOOL refreshContainers) {
                 NSMutableDictionary *cfg = [NSMutableDictionary dictionaryWithCapacity:3];
                 if (gEnabled) cfg[@"globalEnabled"] = gEnabled;
                 if (gExtra) cfg[@"globalExtraTokens"] = gExtra;
+                NSMutableDictionary *prof = [DefaultOverrides(bid) mutableCopy] ?: [NSMutableDictionary dictionary];
                 id p = profiles[bid];
-                cfg[@"profiles"] = [p isKindOfClass:[NSDictionary class]] ? @{ bid: p } : @{};
+                if ([p isKindOfClass:[NSDictionary class]]) [prof addEntriesFromDictionary:p];
+                cfg[@"profiles"] = prof.count ? @{ bid: prof } : @{};
 
                 NSString *dir = [[containers[bid] stringByAppendingPathComponent:@"Documents"]
                                  stringByAppendingPathComponent:@"jbb"];

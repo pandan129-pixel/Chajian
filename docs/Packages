@@ -133,7 +133,7 @@ SHA256: c331546577be712b0b45560ea0134ee9aa09be88674737f69c86daa7a85ad79b
 
 Package: com.pandan.jbb
 Name: JBB
-Version: 6.22.8
+Version: 6.23.0
 Architecture: iphoneos-arm64e
 Section: Tweaks
 Maintainer: pandan
@@ -141,11 +141,11 @@ Author: pandan
 Depends: preferenceloader
 Description: Jailbreak detection bypass (tweak + per-app settings)
 Icon: https://pandan129-pixel.github.io/Chajian/icons/com.pandan.jbb.png
-Filename: ./debs/com.pandan.jbb_6.22.8_iphoneos-arm64e.deb
-Size: 112616
-MD5sum: fa805d0212d8fb9cd2e18766f624fba9
-SHA1: 1d3646a3519335dfac4c945ff534baf68accfe13
-SHA256: af5c967d3d7bdcdcb6c809c88de1929aff72d6b0de23fdf0479ef01b30a19547
+Filename: ./debs/com.pandan.jbb_6.23.0_iphoneos-arm64e.deb
+Size: 114144
+MD5sum: eb12ace7362380af0bd767386a47245b
+SHA1: 0793f878232f4322a6f76bffa4ab0db8c2d791bd
+SHA256: a60c0ae5c370befa4ec0b8af3b19615a137e7dc66d7422123f9a625728697fd5
 
 Package: com.pandan.watrans
 Name: WATrans
@@ -225,7 +225,7 @@ SHA256: 5de4673d803bf8e35d77e17351f9b1f6be422d81ab46ebb6b420c487801944b6
 
 Package: com.pandan.xianyuduo
 Name: 闲鱼助手+存图 融合版
-Version: 1.0.27
+Version: 1.0.28
 Architecture: iphoneos-arm64e
 Section: Tweaks
 Priority: optional
@@ -236,11 +236,11 @@ Conflicts: im.mjh.xianyuadblock, com.pandan.xianyucombo, com.pandan.xianyuplus
 Replaces: im.mjh.xianyuadblock, com.pandan.xianyucombo, com.pandan.xianyuplus
 Installed-Size: 320
 Description: 单 dylib 融合：开屏/热启动广告拦截、信息流广告隐藏、我的页净化与入口，以及商品原图/视频收集与一键保存到相册。基于 3.2.2 与存图插件逆向重写，无 SQLite、无定时器、无常驻后台任务。
-Filename: ./debs/com.pandan.xianyuduo_1.0.27_iphoneos-arm64e.deb
-Size: 235408
-MD5sum: a9fb8b7d32cf1653ca2fad01013e87df
-SHA1: 0841f771eb9cd1f26cd45d79ce02c28a6d42c9d6
-SHA256: 48c9c4218027213c809d6b6ecd537dae96a5b5fe3e500adec01789f8cd2469f4
+Filename: ./debs/com.pandan.xianyuduo_1.0.28_iphoneos-arm64e.deb
+Size: 237700
+MD5sum: 7c289ac8072ff1911d0ea1dd0aad8398
+SHA1: c6df409af3d8638d7bfce4cfeadfdff5db095c30
+SHA256: ca068b6294a9c469a734c29feed4ec585f0e2fbd655e51a949effc764309c0a6
 
 Package: com.wclite.tweak
 Name: WCLite

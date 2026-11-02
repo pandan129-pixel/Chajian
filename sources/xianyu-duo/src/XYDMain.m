@@ -33,6 +33,7 @@ static void XYDInstallCrashHandler(void) {
 }
 
 static void XYDScheduleFeedHooks(void) {
+    if (XYDPrefBool(@"safeMode", NO)) return;
     if (!XYDPrefBool(@"blockFeed", YES) && !XYDPrefBool(@"cleanMyPage", YES)) return;
     // 信息流要枚举全部类并 hook 大量 cell：放到后台队列，且等首帧稳定后再做，
     // 避免启动/通知冷启动时卡主线程被看门狗杀掉。
@@ -46,9 +47,11 @@ static void XYDScheduleFeedHooks(void) {
 static void XYDInstallAll(void) {
     @try { XYDInstallCapture(); } @catch (NSException *e) { XYD_LOG(@"capture install guard %@", e.reason); }
     @try { XYDInstallContext(); } @catch (NSException *e) { XYD_LOG(@"context install guard %@", e.reason); }
-    @try { XYDInstallSplashHooks(); } @catch (NSException *e) { XYD_LOG(@"splash install guard %@", e.reason); }
-    @try { XYDInstallEntry(); } @catch (NSException *e) { XYD_LOG(@"entry install guard %@", e.reason); }
-    XYDScheduleFeedHooks();
+    if (!XYDPrefBool(@"safeMode", NO)) {
+        @try { XYDInstallSplashHooks(); } @catch (NSException *e) { XYD_LOG(@"splash install guard %@", e.reason); }
+        @try { XYDInstallEntry(); } @catch (NSException *e) { XYD_LOG(@"entry install guard %@", e.reason); }
+        XYDScheduleFeedHooks();
+    }
 }
 
 static BOOL XYDIncomplete(void) {
