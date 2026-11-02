@@ -1,0 +1,11 @@
+Package: com.pandan.weifengadclean
+Name: 威锋去广告 WeifengAdClean
+Description: 从威锋 7.1.1 去广告 IPA 提取的插件，重打包为 TweakInject 注入版，适配威锋 7.1.2。拦截开屏、插屏、信息流、详情页广告，屏蔽广告 SDK 请求与埋点上报。已移除每次启动弹出的「学习声明」。
+Version: 1.0.1
+Architecture: iphoneos-arm64e
+Section: Tweaks
+Depends: firmware (>= 15.0), mobilesubstrate
+Priority: optional
+Author: pandan
+Maintainer: pandan
+Installed-Size: 260

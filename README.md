@@ -90,8 +90,8 @@ exclude_packages = com.bandarhl.bhtwitter com.pandan.xianyu322
 
 当前收录：`jbb`、`BHTwitter / NFX 7.2 (X 12.39)`、`闲鱼助手+存图`、`AI 日志分析 Pro`、
 `高德 NoAds`、`WCLite`、`小红薯(去公告)`、`WATrans`、`威锋NoAds`、
-`NTQQ_AntiRecall 1.6.2`。外部 deb 都放在 `debs-in/`，来源和校验和见
-`debs-in/README.md`。
+`威锋去广告 WeifengAdClean`、`NTQQ_AntiRecall 1.6.2`。外部 deb 都放在 `debs-in/`，
+来源和校验和见 `debs-in/README.md`。
 
 X 插件当前用 `com.bandarhl.bhtwitter 7.2-20`（`Conflicts/Replaces: com.nfb.tweak`）；
 NeoFreeBird 7.3.0-7 已从源里下架（在 `exclude_packages` 里），源码仍存档在

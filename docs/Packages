@@ -163,6 +163,40 @@ MD5sum: 92277c2ed994dc58f0fec90ade7ae567
 SHA1: 41e8a98bfcdb06668e1c5ccb70ce343431a11696
 SHA256: 7a0620bfd7a3fbfa8c6c8f91b054981d9d71c52e716245b73f782b64c568b393
 
+Package: com.pandan.weifengadclean
+Name: 威锋去广告 WeifengAdClean
+Version: 1.0.1
+Architecture: iphoneos-arm64
+Section: Tweaks
+Priority: optional
+Maintainer: pandan
+Author: pandan
+Depends: firmware (>= 15.0), mobilesubstrate
+Installed-Size: 260
+Description: 从威锋 7.1.1 去广告 IPA 提取的插件，重打包为 TweakInject 注入版，适配威锋 7.1.2。拦截开屏、插屏、信息流、详情页广告，屏蔽广告 SDK 请求与埋点上报。已移除每次启动弹出的「学习声明」。
+Filename: ./debs/com.pandan.weifengadclean_1.0.1_iphoneos-arm64.deb
+Size: 76780
+MD5sum: 25d5e880d4bb467e04eb83779da8180b
+SHA1: a763e7d366f557377ead90c87acdc13d77db3e0b
+SHA256: 7c547a89163c3c1698da75119f12da166e2bdb91fad74f28a715a06d4c26eacb
+
+Package: com.pandan.weifengadclean
+Name: 威锋去广告 WeifengAdClean
+Version: 1.0.1
+Architecture: iphoneos-arm64e
+Section: Tweaks
+Priority: optional
+Maintainer: pandan
+Author: pandan
+Depends: firmware (>= 15.0), mobilesubstrate
+Installed-Size: 260
+Description: 从威锋 7.1.1 去广告 IPA 提取的插件，重打包为 TweakInject 注入版，适配威锋 7.1.2。拦截开屏、插屏、信息流、详情页广告，屏蔽广告 SDK 请求与埋点上报。已移除每次启动弹出的「学习声明」。
+Filename: ./debs/com.pandan.weifengadclean_1.0.1_iphoneos-arm64e.deb
+Size: 76784
+MD5sum: 78e372c486e24b35d987e8cf084e7f04
+SHA1: 323a7906a82d16759ea8d6dfccf991ab1428ff1b
+SHA256: c5c2b479ea9f12182a68f81cf347f4fc46b301dd12427071f17f32b647fd6532
+
 Package: com.pandan.xhs.noad
 Name: 小红薯(去公告)
 Version: 2.0.6-7

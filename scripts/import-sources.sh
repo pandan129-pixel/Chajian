@@ -12,7 +12,7 @@ DST="$WS/repo/sources"
 echo "[sources] $WS -> $DST"
 mkdir -p "$DST"
 # 只重建由本脚本管理的四个项目，保留 sources/ 下其它手工目录
-for p in jbb xianyu-duo crash-analyzer-pro amap-splash x-twitter-nfb x-twitter-nfx; do
+for p in jbb xianyu-duo crash-analyzer-pro amap-splash x-twitter-nfb x-twitter-nfx weifeng; do
     rm -rf "$DST/$p"
 done
 rm -f "$DST/README.md"
@@ -85,6 +85,14 @@ done
 for f in NFXSettingsRow.m NFXSettingsGesture.m; do
     [ -f "$WS/plugins/x-twitter-nfx/src/$f" ] && \
         cp "$WS/plugins/x-twitter-nfx/src/$f" "$DST/x-twitter-nfx/src/"
+done
+
+# ---- weifeng ---------------------------------------------------------
+mkdir -p "$DST/weifeng"
+cp "$WS/weifeng/README.md" "$DST/weifeng/"
+for p in packaging scripts docs tools; do
+    [ -d "$WS/weifeng/$p" ] && \
+        copy_dir "weifeng/$p" "weifeng/$p"
 done
 
 # ---- clean + sanitize ------------------------------------------------

@@ -10,6 +10,7 @@
 | `amap-splash/` | `com.pandan.amapsplash` | 高德地图 | 开屏/实时广告与启动弹窗 |
 | `x-twitter-nfb/` | `com.nfb.tweak` | X (Twitter) | NeoFreeBird 7.3.0 重打包 + 简体中文汉化（上游 GPL-3.0，已从源里下架，源码存档） |
 | `x-twitter-nfx/` | `com.bandarhl.bhtwitter` | X (Twitter) | BHTwitter / NFX 7.2 (X 12.39) 重打包 + NFXSettingsRow 辅助源码（第三方 dylib/bundle 不入库） |
+| `weifeng/` | `com.pandan.weifengadclean` | 威锋 | 从 7.1.1 去广告 IPA 提取并适配 7.1.2；只保留脚本/文档，第三方 dylib 和解密 App 不入库 |
 
 ## 构建
 
@@ -21,6 +22,8 @@
 - `x-twitter-nfx` 是 BHTwitter 7.2 的重打包：`extract.sh` 从 X 12.37 IPA 提取，
   `build-1239.sh` 适配 X 12.39；需要 `machocheck`、`dpkg-deb` 和
   `x-twitter-nfb/fix/NFBBundleFix.dylib`；`src/` 只保留 NFXSettingsRow/Gesture 源码
+- `weifeng` 用 `scripts/pack-deb.sh` 重打包，需要原始 `WeifengAdClean.orig.dylib`
+  （从威锋去广告 IPA 提取）和 `dpkg-deb`；解密/适配过程见 `docs/REVERSE-NOTES.md`
 - 目标架构：roothide 用 `iphoneos-arm64e`，rootless 用 `iphoneos-arm64`
 
 每个目录的 `README.md` 里有各自的构建、打包、安装命令。
@@ -36,6 +39,7 @@ DEVICE_HOST=192.168.1.10 DEVICE_PASSWORD='your-password' sh scripts/install.sh
 ## 未包含
 
 - 第三方二进制/资源：`BHTwitter.dylib` / `BHTwitter.bundle`、`zxPluginsInject.dylib`、
+  `WeifengAdClean.orig.dylib`、`WeiFeng-7.1.2.bin`、`wfhook-device.dylib`、
   NFB 的 vendor deb、WCLite、小红薯、WATrans、WKK 高德原包等
 - `build/`、`dist/` 等编译产物和签名后的 dylib/deb
 - 部分内部 handoff 文档和设备日志
